@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>日本語 — Изучение японского</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#efe7d3; --paper2:#e3d8ba; --ink:#2a2620; --ink-soft:#726a58;
+  --indigo:#2f3f66; --indigo-deep:#22304f; --vermillion:#b1402b; --gold:#a8823c;
+  --card:#f8f2e2; --line: rgba(42,38,32,0.16);
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1b1a1f; --paper2:#242229; --ink:#eee7d6; --ink-soft:#a49a86;
+    --indigo:#93a3d1; --indigo-deep:#cdd6f0; --vermillion:#e2836a; --gold:#d9b96b;
+    --card:#242229; --line: rgba(238,231,214,0.14);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1b1a1f; --paper2:#242229; --ink:#eee7d6; --ink-soft:#a49a86;
+  --indigo:#93a3d1; --indigo-deep:#cdd6f0; --vermillion:#e2836a; --gold:#d9b96b;
+  --card:#242229; --line: rgba(238,231,214,0.14);
+}
+html,body{height:100%;}
+*{box-sizing:border-box;}
+body{
+  margin:0; color:var(--ink); font-family:"Zen Maru Gothic", sans-serif; min-height:100%;
+  background-color:var(--paper);
+  background-image:
+    radial-gradient(circle at 50% 100%, transparent 62%, var(--paper2) 63%, var(--paper2) 68%, transparent 69%);
+  background-size: 46px 23px;
+}
+.wrap{max-width:680px; margin:0 auto; padding:26px 20px 60px; position:relative;}
+.stamp{
+  position:absolute; top:26px; right:20px; width:46px; height:46px; background:var(--vermillion);
+  color:#f8f2e2; border-radius:6px; display:flex; align-items:center; justify-content:center;
+  font-family:"Shippori Mincho",serif; font-size:13px; line-height:1.1; text-align:center;
+  transform:rotate(4deg); writing-mode:vertical-rl; letter-spacing:1px; box-shadow:0 2px 0 var(--line);
+}
+header{margin-bottom:8px; padding-right:56px;}
+h1{
+  font-family:"Shippori Mincho", serif; font-weight:700;
+  font-size:clamp(26px,6vw,36px); margin:0 0 4px; color:var(--indigo-deep);
+}
+.sub{color:var(--ink-soft); font-size:14px; margin:0 0 14px;}
+.rule{height:3px; background:linear-gradient(90deg,var(--vermillion),var(--gold)); border-radius:2px; margin-bottom:22px; opacity:.75;}
+.hidden{display:none !important;}
+.backbtn{
+  background:none; border:1px solid var(--line); color:var(--ink-soft); border-radius:999px;
+  padding:6px 14px; font-size:13px; font-family:"Zen Maru Gothic",sans-serif; cursor:pointer; margin-bottom:18px;
+}
+
+/* Main menu */
+#menuScreen{display:flex; flex-direction:column; align-items:center; gap:16px; padding-top:20px;}
+.menu-btn{
+  width:100%; max-width:300px; background:var(--card); border:1px solid var(--line);
+  border-top:4px solid var(--vermillion); border-radius:14px; padding:22px 16px;
+  display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer;
+}
+.menu-btn:nth-child(2){border-top-color:var(--indigo);}
+.menu-btn .glyph{font-family:"Shippori Mincho",serif; font-size:40px; color:var(--indigo-deep);}
+.menu-btn .label{font-size:15px; color:var(--ink); font-weight:700;}
+.menu-btn .desc{font-size:12px; color:var(--ink-soft);}
+
+/* Kana screen */
+.setrow{display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; justify-content:center;}
+.chip{
+  padding:7px 16px; border-radius:999px; border:1px solid var(--line);
+  background:var(--card); color:var(--ink); font-size:14px; cursor:pointer; font-family:"Zen Maru Gothic",sans-serif;
+}
+.chip.active{background:var(--indigo); color:#f8f2e2; border-color:var(--indigo);}
+nav.tabs{display:flex; gap:8px; margin:0 0 18px; border-bottom:1px solid var(--line); justify-content:center; flex-wrap:wrap;}
+nav.tabs button{
+  padding:9px 18px; background:none; border:none; cursor:pointer; font-family:"Zen Maru Gothic",sans-serif;
+  font-size:15px; color:var(--ink-soft); border-bottom:2px solid transparent; margin-bottom:-1px;
+}
+nav.tabs button.active{color:var(--indigo-deep); border-bottom-color:var(--vermillion); font-weight:700;}
+
+/* Grid of selectable tiles (replaces one-by-one flashcards) */
+.tile-hint{text-align:center; font-size:13px; color:var(--ink-soft); margin-bottom:14px;}
+.grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(74px,1fr)); gap:8px;}
+.tile{
+  background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px 4px;
+  min-height:70px; display:flex; align-items:center; justify-content:center; cursor:pointer;
+}
+.tile .t-main{font-family:"Shippori Mincho",serif; font-size:30px; color:var(--indigo-deep);}
+.tile .t-alt{font-size:12px; color:var(--vermillion); line-height:1.3; text-align:center; font-weight:700;}
+.tile .t-alt .meaning{display:block; color:var(--ink-soft); font-weight:400; margin-top:2px;}
+
+/* Quiz */
+.quiz-box{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:26px 18px; text-align:center; max-width:420px; margin:0 auto;}
+.quiz-kana{font-family:"Shippori Mincho",serif; font-size:64px; color:var(--indigo-deep); margin-bottom:20px;}
+.opts{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.opt{padding:12px 8px; border-radius:10px; border:1px solid var(--line); background:var(--paper2); font-size:14px; color:var(--ink); cursor:pointer; font-family:"Zen Maru Gothic",sans-serif;}
+.opt.correct{background:var(--indigo); color:#f8f2e2; border-color:var(--indigo);}
+.opt.wrong{background:var(--vermillion); color:#fff; border-color:var(--vermillion);}
+.opt[disabled]{cursor:default;}
+.scorebar{display:flex; justify-content:center; gap:18px; font-size:13px; color:var(--ink-soft); margin:16px 2px; flex-wrap:wrap;}
+.next-hint{margin-top:14px; font-size:14px; color:var(--ink-soft); min-height:20px;}
+
+/* Course screen */
+.level{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:6px 18px; margin-bottom:12px;}
+.level-title{font-family:"Shippori Mincho",serif; font-size:22px; font-weight:700; color:var(--indigo-deep); padding:14px 0; cursor:pointer; list-style:none;}
+.level-title::-webkit-details-marker{display:none;}
+.free-badge{font-family:"Zen Maru Gothic",sans-serif; font-size:11px; font-weight:700; color:var(--indigo); border:1px solid var(--indigo); border-radius:999px; padding:2px 9px; vertical-align:middle; margin-left:8px;}
+.premium-badge{font-family:"Zen Maru Gothic",sans-serif; font-size:11px; font-weight:700; color:var(--vermillion); border:1px solid var(--vermillion); border-radius:999px; padding:2px 9px; vertical-align:middle; margin-left:8px;}
+.level.locked{opacity:.72;}
+.grammar-item{border-top:1px solid var(--line); padding:12px 2px;}
+.grammar-item:first-child{border-top:none;}
+.grammar-item .g-point{font-weight:700; color:var(--indigo-deep); margin-right:6px;}
+.grammar-item .g-example{color:var(--ink-soft); font-size:13px; margin-top:4px;}
+.g-head{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+.g-done{font-size:12px; color:var(--indigo); font-weight:700; white-space:nowrap;}
+.g-testbtn{margin-top:10px;}
+.g-quizbox{margin-top:12px; background:var(--paper2); border-radius:12px; padding:14px;}
+.g-quizbox.hidden{display:none;}
+.g-q{font-size:15px; margin-bottom:10px;}
+.g-result{font-size:15px; margin-bottom:8px;}
+.practice-card{background:var(--paper2); border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:8px; cursor:pointer;}
+.practice-card .p-q{font-size:15px;}
+.practice-card .p-a{display:none; margin-top:6px; font-size:13px; color:var(--vermillion);}
+.practice-card.open .p-a{display:block;}
+.lesson{border-top:1px solid var(--line); padding:4px 0;}
+.lesson-title{font-size:15px; font-weight:500; color:var(--ink); padding:10px 2px; cursor:pointer; list-style:none; display:flex; align-items:center; gap:8px;}
+.lesson-title::-webkit-details-marker{display:none;}
+.lesson-title::before{content:"◆"; color:var(--vermillion); font-size:10px;}
+.lesson-body{padding:6px 2px 16px;}
+footer{margin-top:36px; font-size:12px; color:var(--ink-soft); text-align:center;}
+
+/* --- Animations --- */
+@keyframes fadeSlideIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+.fade-in{animation:fadeSlideIn .38s cubic-bezier(.22,.9,.35,1);}
+@keyframes popCorrect{0%{transform:scale(1);}45%{transform:scale(1.06);}100%{transform:scale(1);}}
+@keyframes shakeWrong{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+.opt.correct{animation:popCorrect .35s ease;}
+.opt.wrong{animation:shakeWrong .4s ease;}
+.tile{transition:transform .18s ease, box-shadow .18s ease;}
+.tile:hover{transform:translateY(-3px); box-shadow:0 6px 14px rgba(0,0,0,.14);}
+.tile:active{transform:translateY(0) scale(.97);}
+.chip, .menu-btn, .backbtn, nav.tabs button{transition:transform .15s ease, background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;}
+.chip:active, .menu-btn:active{transform:scale(.96);}
+.menu-btn:hover{transform:translateY(-2px); box-shadow:0 8px 18px rgba(0,0,0,.12);}
+nav.tabs button{position:relative;}
+nav.tabs button.active{animation:fadeSlideIn .3s ease;}
+.practice-card{transition:transform .15s ease, box-shadow .15s ease;}
+.practice-card:hover{transform:translateY(-2px); box-shadow:0 4px 10px rgba(0,0,0,.1);}
+.practice-card .p-a{animation:fadeSlideIn .3s ease;}
+
+/* --- Level tabs (course) --- */
+.level-badge{font-family:"Zen Maru Gothic",sans-serif; font-size:11px; font-weight:700; color:var(--indigo); border:1px solid var(--indigo); border-radius:999px; padding:2px 9px; margin-left:6px;}
+
+/* --- Cloze / fill-in exercises --- */
+.cloze-box{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:24px 18px; text-align:center; max-width:460px; margin:0 auto;}
+.cloze-sent{font-size:20px; line-height:1.8; margin-bottom:18px; color:var(--ink);}
+.cloze-blank{display:inline-block; min-width:38px; border-bottom:2px solid var(--vermillion); color:var(--vermillion); font-weight:700; padding:0 2px;}
+.cloze-note{margin-top:14px; font-size:13px; color:var(--ink-soft); min-height:18px;}
+
+/* --- Reading text with hover translation --- */
+.reading-box{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px 20px; max-width:520px; margin:0 auto;}
+.reading-text{font-size:19px; line-height:2.3; letter-spacing:.5px;}
+.rw{position:relative; cursor:pointer; border-bottom:1px dashed var(--gold); transition:color .15s ease;}
+.rw:hover, .rw.show{color:var(--vermillion);}
+.rw-tip{
+  position:absolute; bottom:100%; left:50%; transform:translate(-50%,4px);
+  background:var(--indigo-deep); color:#f8f2e2; padding:5px 10px; border-radius:8px;
+  font-size:12px; font-family:"Zen Maru Gothic",sans-serif; white-space:nowrap;
+  opacity:0; pointer-events:none; transition:opacity .18s ease, transform .18s ease; z-index:5;
+}
+.rw:hover .rw-tip, .rw.show .rw-tip{opacity:1; transform:translate(-50%,-4px);}
+.g-struct{margin:10px 0 6px; padding:8px 12px; background:var(--paper2); border-left:3px solid var(--vermillion); border-radius:8px; font-size:14px;}
+.g-struct b{color:var(--vermillion);}
+.g-ex2{margin:8px 0; padding:8px 0 4px; border-top:1px dashed var(--line);}
+.g-ex2 .g-jp{font-size:18px; line-height:2.2;}
+.g-ex2 .g-rd{font-size:12px; color:var(--ink-soft);}
+.g-ex2 .g-tr{font-size:14px;}
+.g-build{margin-top:10px; padding:10px; border:1px solid var(--line); border-radius:12px;}
+.g-build .g-answer{min-height:44px; padding:8px; border-bottom:2px solid var(--vermillion); font-size:18px; margin-bottom:8px;}
+.g-build .g-chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px;}
+.g-build .chip{min-height:44px; font-size:16px;}
+.g-build .g-fb{font-size:14px; min-height:20px;}
+.wview{justify-content:flex-end; margin:0 0 10px;}
+.wview .chip{padding:4px 12px; font-size:13px;}
+#wordsList.wl-compact{display:grid; grid-template-columns:1fr; gap:6px;}
+@media (min-width:560px){ #wordsList.wl-compact{grid-template-columns:1fr 1fr;} }
+#wordsList.wl-compact .word-card{margin:0; padding:6px 8px 6px 12px; border-radius:10px; min-width:0;}
+#wordsList.wl-compact .w-head{display:grid; grid-template-columns:1fr auto; grid-template-areas:"jp snd" "rd snd" "tr snd"; column-gap:8px; row-gap:0; align-items:center;}
+#wordsList.wl-compact .w-jp{grid-area:jp; font-size:19px; line-height:1.25; overflow-wrap:anywhere;}
+#wordsList.wl-compact .w-reading{grid-area:rd; font-size:12px; line-height:1.2;}
+#wordsList.wl-compact .w-tr{grid-area:tr; margin:0; font-size:13px; line-height:1.3; color:var(--vermillion);}
+#wordsList.wl-compact .word-card .snd{grid-area:snd; width:32px; height:32px; font-size:14px; margin:0;}
+#wordsList.wl-compact .w-ex{margin-top:6px; padding-top:6px; font-size:13px;}
+.wmore{display:block; width:100%; margin:12px 0 0; min-height:44px;}
+.reading-hint{text-align:center; font-size:13px; color:var(--ink-soft); margin-bottom:14px;}
+
+/* --- Words & progress --- */
+.word-card{background:var(--paper2); border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:8px; cursor:pointer;}
+.word-card .w-head{display:flex; align-items:baseline; gap:10px;}
+.word-card .w-jp{font-family:"Shippori Mincho",serif; font-size:22px; color:var(--indigo-deep);}
+.word-card .w-reading{font-size:13px; color:var(--ink-soft);}
+.word-card .w-tr{font-size:14px; margin-left:auto; color:var(--ink);}
+.word-card .w-ex{display:none; margin-top:8px; padding-top:8px; border-top:1px dashed var(--line); font-size:14px;}
+.word-card.open .w-ex{display:block; animation:fadeSlideIn .3s ease;}
+.reveal-btn{margin-top:6px; background:none; border:1px solid var(--vermillion); color:var(--vermillion); border-radius:999px; padding:3px 12px; font-size:12px; cursor:pointer; font-family:"Zen Maru Gothic",sans-serif;}
+.stat-card{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 18px; margin-bottom:12px;}
+.stat-card h3{font-family:"Shippori Mincho",serif; margin:0 0 8px; color:var(--indigo-deep); font-size:18px;}
+.stat-row{display:flex; justify-content:space-between; font-size:14px; padding:3px 0; color:var(--ink);}
+.mistake-tag{display:inline-block; background:var(--paper2); border:1px solid var(--line); border-radius:999px; padding:3px 10px; font-size:13px; margin:3px 4px 0 0;}
+
+/* ===== v2: mobile app shell ===== */
+.wrap{padding-bottom:110px;}
+header{padding-right:112px;}
+.themebtn{position:absolute; top:26px; right:76px; width:44px; height:44px; border-radius:50%; border:1px solid var(--line); background:var(--card); font-size:20px; cursor:pointer;}
+.bnav{position:fixed; left:0; right:0; bottom:0; z-index:20; display:flex; justify-content:center; gap:4px; background:var(--card); border-top:1px solid var(--line); padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));}
+.bnav button{flex:1; max-width:170px; min-height:56px; background:none; border:none; color:var(--ink-soft); font:500 11px "Zen Maru Gothic",sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; border-radius:12px;}
+.bnav button .ic{font-size:22px; line-height:1;}
+.bnav button.active{color:var(--vermillion); font-weight:700; background:var(--paper2);}
+.hero{width:100%; background:var(--card); border:1px solid var(--line); border-top:4px solid var(--vermillion); border-radius:16px; padding:18px;}
+.hero h2,.sec-title{font-family:"Shippori Mincho",serif; margin:0; font-size:22px; color:var(--indigo-deep);}
+.hero .lvl{display:flex; justify-content:space-between; align-items:baseline; margin-top:14px; font-size:15px;}
+.bar{height:10px; border-radius:99px; background:var(--paper2); overflow:hidden; margin:6px 0;}
+.bar>i{display:block; height:100%; background:linear-gradient(90deg,var(--vermillion),var(--gold)); border-radius:99px; transition:width .6s ease;}
+.pills{display:flex; gap:8px; flex-wrap:wrap; margin:12px 0;}
+.pill{background:var(--paper2); border-radius:999px; padding:6px 12px; font-size:14px;}
+.btnrow{display:flex; flex-direction:column; gap:8px;}
+.big{min-height:48px; border-radius:14px; border:1px solid var(--line); background:var(--card); color:var(--ink); font:700 15px "Zen Maru Gothic",sans-serif; cursor:pointer;}
+.big.primary{background:var(--vermillion); color:#fff; border-color:var(--vermillion);}
+#levelsScreen .lv-sub{font-size:13px;color:var(--ink-soft);text-align:center;margin:0 0 4px;}
+.menu-btn.locked{opacity:.5;cursor:not-allowed;border-top-color:var(--ink-soft);}
+.menu-btn.locked:hover{transform:none;box-shadow:none;}
+#studyScreen, #levelsScreen{display:flex; flex-direction:column; align-items:center; gap:16px; padding-top:12px;}
+#reviewScreen .sec-title{margin:6px 0 14px;}
+.rcard{background:var(--card); border:1px solid var(--line); border-radius:18px; padding:26px 18px; text-align:center; min-height:230px; cursor:pointer; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:10px;}
+.rjp{font-family:"Shippori Mincho",serif; font-size:44px; color:var(--indigo-deep); word-break:break-all;}
+.rrd{font-size:18px; color:var(--vermillion); font-weight:700;} .rtr{font-size:18px;}
+.grades{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px;}
+.ok-anim{animation:popCorrect .4s ease;} .no-anim{animation:shakeWrong .4s ease;}
+.snd{display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border:1px solid var(--line); border-radius:50%; background:var(--card); font-size:18px; cursor:pointer; flex:none;}
+.word-card .snd{margin-left:8px;}
+.snd.mini{position:absolute; top:1px; right:1px; width:30px; height:30px; font-size:13px; border:none; background:transparent;}
+.tile{position:relative;}
+.snd.playing{animation:sndPulse .7s ease-in-out infinite; background:var(--paper2);}
+@keyframes sndPulse{50%{transform:scale(1.15); box-shadow:0 0 0 6px rgba(177,64,43,.18);}}
+.chart{display:flex; align-items:flex-end; gap:8px; height:96px;}
+.chart>div{flex:1; text-align:center; font-size:11px; color:var(--ink-soft);}
+.chart b{display:block; background:var(--indigo); border-radius:6px 6px 0 0; min-height:3px; margin-bottom:4px;}
+.toast{position:fixed; left:50%; bottom:88px; transform:translateX(-50%); background:var(--indigo-deep); color:#fff; padding:8px 14px; border-radius:999px; font-size:13px; z-index:30; opacity:0; transition:opacity .25s; pointer-events:none; max-width:90vw; text-align:center;}
+@media (max-width:400px){ .rjp{font-size:38px;} .hero{padding:14px;} }.wsearch{width:100%; padding:11px 14px; border:1px solid var(--line); border-radius:12px; background:var(--card); color:var(--ink); font:15px "Zen Maru Gothic",sans-serif; margin-bottom:10px;}
+.wsearch:focus{outline:2px solid var(--indigo); outline-offset:1px;}
+.cat-chip{font-size:13px; padding:5px 12px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <button class="themebtn" id="themeBtn" aria-label="Сменить тему">🌙</button><div class="stamp">日本語</div>
+  <header>
+    <h1>日本語のたび</h1>
+    <p class="sub">Путешествие в японский язык</p>
+  </header>
+  <div class="rule"></div>
+
+  <!-- MAIN MENU -->
+  <section id="menuScreen"><div class="hero" id="dash"></div></section>
+
+  <!-- STUDY -->
+  <section id="studyScreen" class="hidden">
+    <button class="menu-btn" id="goKana">
+      <span class="glyph">仮名</span>
+      <span class="label">Кана</span>
+      <span class="desc">Хирагана, катакана и кандзи — карточки и тесты</span>
+    </button>
+    <button class="menu-btn" id="goCourse">
+      <span class="glyph">講座</span>
+      <span class="label">Курс</span>
+      <span class="desc">Уровни N5–N1: сейчас открыт N5</span>
+    </button>
+  </section>
+
+  <!-- COURSE LEVELS -->
+  <section id="levelsScreen" class="hidden">
+    <button class="backbtn" data-back="study">← Учёба</button>
+    <p class="lv-sub">Выбери уровень. Пока открыт только N5.</p>
+    <button class="menu-btn" data-lvopen="n5"><span class="glyph">N5</span><span class="label">Начальный уровень</span><span class="desc">Открыт: кандзи, слова, грамматика, тест</span></button>
+    <button class="menu-btn locked" data-lvlock="n4" aria-disabled="true"><span class="glyph">N4</span><span class="label">🔒 Закрыто</span><span class="desc">Появится позже</span></button>
+    <button class="menu-btn locked" data-lvlock="n3" aria-disabled="true"><span class="glyph">N3</span><span class="label">🔒 Закрыто</span><span class="desc">Появится позже</span></button>
+    <button class="menu-btn locked" data-lvlock="n2" aria-disabled="true"><span class="glyph">N2</span><span class="label">🔒 Закрыто</span><span class="desc">Появится позже</span></button>
+    <button class="menu-btn locked" data-lvlock="n1" aria-disabled="true"><span class="glyph">N1</span><span class="label">🔒 Закрыто</span><span class="desc">Появится позже</span></button>
+  </section>
+
+  <!-- REVIEW -->
+  <section id="reviewScreen" class="hidden">
+    <h2 class="sec-title">Повторение сегодня</h2>
+    <div id="reviewBody"></div>
+  </section>
+
+  <!-- PROGRESS SCREEN -->
+  <section id="progressScreen" class="hidden">
+    <div id="progressBody"></div>
+  </section>
+
+  <!-- KANA SCREEN -->
+  <section id="kanaScreen" class="hidden">
+    <button class="backbtn" data-back="study">← Учёба</button>
+    <div class="setrow" id="setRow">
+      <button class="chip active" data-set="hira">Хирагана</button>
+      <button class="chip" data-set="kata">Катакана</button>
+      <button class="chip" data-set="kanji">Кандзи</button>
+      <button class="chip" data-set="both">Обе каны</button>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button class="active" data-mode="cards">Карточки</button>
+      <button data-mode="quiz">Тест</button>
+    </nav>
+
+    <div id="cardsMode">
+      <p class="tile-hint">Нажми на знак, чтобы увидеть чтение — выбирай любой сам</p>
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <div id="quizMode" class="hidden">
+      <div class="quiz-box">
+        <div class="quiz-kana" id="quizKana"></div>
+        <div class="opts" id="quizOpts"></div>
+        <div class="next-hint" id="quizFeedback"></div>
+      </div>
+      <div class="scorebar">
+        <span id="quizProgress">Вопрос 1 / 20</span>
+        <span id="quizScore">Верно: 0</span>
+        <span id="quizBest">Рекорд: —</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- COURSE SCREEN -->
+  <section id="courseScreen" class="hidden">
+    <button class="backbtn" data-back="levels">← Уровни</button>
+
+
+    <nav class="tabs" id="courseTabs">
+      <button class="active" data-ctab="kanji">Кандзи</button>
+      <button data-ctab="words">Слова</button>
+      <button data-ctab="grammar">Грамматика</button>
+      <button data-ctab="exam">Тест уровня</button>
+    </nav>
+
+    <!-- KANJI PANE -->
+    <div id="courseKanjiPane">
+      <nav class="tabs" id="kanjiSubTabs">
+        <button class="active" data-ksub="cards">Карточки</button>
+        <button data-ksub="test">Тест</button>
+      </nav>
+      <div id="kanjiCardsMode">
+        <p class="tile-hint">Нажми на знак, чтобы увидеть чтение и значение</p>
+        <div class="grid" id="courseKanjiGrid"></div>
+      </div>
+      <div id="kanjiTestMode" class="hidden">
+        <div class="cloze-box">
+          <div class="cloze-sent" id="kanjiClozeSent"></div>
+          <div class="opts" id="kanjiClozeOpts"></div>
+          <div class="cloze-note" id="kanjiClozeNote"></div>
+        </div>
+        <div class="scorebar">
+          <span id="kanjiClozeProgress"></span>
+          <span id="kanjiClozeScore"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WORDS PANE -->
+    <div id="courseWordsPane" class="hidden">
+      <p class="tile-hint">Нажми на слово, чтобы увидеть пример и перевод</p>
+      <input type="text" id="wordsSearch" class="wsearch" placeholder="Поиск: слово, чтение или перевод…">
+      <div class="setrow" id="wordsCatRow"></div>
+      <div class="setrow wview" id="wordsViewRow"><button class="chip" data-wv="compact">▤ Компактно</button><button class="chip" data-wv="wide">☰ Крупно</button></div>
+      <p class="tile-hint" id="wordsCount" style="margin-top:0"></p>
+      <div id="wordsList"></div>
+    </div>
+
+    <!-- GRAMMAR PANE -->
+    <div id="courseGrammarPane" class="hidden">
+      <p class="tile-hint" id="grammarProgressLine" style="margin-top:0"></p>
+      <div class="lesson-body" id="grammarList"></div>
+    </div>
+
+    <!-- MIXED LEVEL EXAM PANE -->
+    <div id="courseExamPane" class="hidden">
+      <p class="reading-hint">Прочитай текст, наведи или нажми на слово для перевода — затем пройди тест по всему уровню ниже</p>
+      <div class="reading-box" id="examReadingBox"></div>
+      <p class="tile-hint">Слова, кандзи и грамматика вперемешку — ошибки будут чаще повторяться в следующих тестах</p>
+      <div class="cloze-box">
+        <div class="cloze-sent" id="examSent"></div>
+        <div class="opts" id="examOpts"></div>
+        <div class="cloze-note" id="examNote"></div>
+      </div>
+      <div class="scorebar">
+        <span id="examProgress"></span>
+        <span id="examScore"></span>
+      </div>
+    </div>
+  </section>
+
+  <footer>Годзюон + дакутэн/хандакутэн. Открыт уровень N5; N4–N1 добавим в следующих обновлениях.</footer>
+</div>
+
+<nav class="bnav" id="bnav">
+  <button data-nav="menuScreen" class="active"><span class="ic">🏠</span>Главная</button>
+  <button data-nav="studyScreen"><span class="ic">📖</span>Учёба</button>
+  <button data-nav="reviewScreen"><span class="ic">🔁</span>Повторение</button>
+  <button data-nav="progressScreen"><span class="ic">📊</span>Прогресс</button>
+</nav>
+<script src="n5-data.js"></script>
+<script src="n5-grammar.js"></script>
+<script>
+const HIRA_RAW = [["あ","a"],["い","i"],["う","u"],["え","e"],["お","o"],
+["か","ka"],["き","ki"],["く","ku"],["け","ke"],["こ","ko"],
+["さ","sa"],["し","shi"],["す","su"],["せ","se"],["そ","so"],
+["た","ta"],["ち","chi"],["つ","tsu"],["て","te"],["と","to"],
+["な","na"],["に","ni"],["ぬ","nu"],["ね","ne"],["の","no"],
+["は","ha"],["ひ","hi"],["ふ","fu"],["へ","he"],["ほ","ho"],
+["ま","ma"],["み","mi"],["む","mu"],["め","me"],["も","mo"],
+["や","ya"],["ゆ","yu"],["よ","yo"],
+["ら","ra"],["り","ri"],["る","ru"],["れ","re"],["ろ","ro"],
+["わ","wa"],["を","wo"],["ん","n"],
+["が","ga"],["ぎ","gi"],["ぐ","gu"],["げ","ge"],["ご","go"],
+["ざ","za"],["じ","ji"],["ず","zu"],["ぜ","ze"],["ぞ","zo"],
+["だ","da"],["ぢ","ji"],["づ","zu"],["で","de"],["ど","do"],
+["ば","ba"],["び","bi"],["ぶ","bu"],["べ","be"],["ぼ","bo"],
+["ぱ","pa"],["ぴ","pi"],["ぷ","pu"],["ぺ","pe"],["ぽ","po"]];
+const KATA_RAW = [["ア","a"],["イ","i"],["ウ","u"],["エ","e"],["オ","o"],
+["カ","ka"],["キ","ki"],["ク","ku"],["ケ","ke"],["コ","ko"],
+["サ","sa"],["シ","shi"],["ス","su"],["セ","se"],["ソ","so"],
+["タ","ta"],["チ","chi"],["ツ","tsu"],["テ","te"],["ト","to"],
+["ナ","na"],["ニ","ni"],["ヌ","nu"],["ネ","ne"],["ノ","no"],
+["ハ","ha"],["ヒ","hi"],["フ","fu"],["ヘ","he"],["ホ","ho"],
+["マ","ma"],["ミ","mi"],["ム","mu"],["メ","me"],["モ","mo"],
+["ヤ","ya"],["ユ","yu"],["ヨ","yo"],
+["ラ","ra"],["リ","ri"],["ル","ru"],["レ","re"],["ロ","ro"],
+["ワ","wa"],["ヲ","wo"],["ン","n"],
+["ガ","ga"],["ギ","gi"],["グ","gu"],["ゲ","ge"],["ゴ","go"],
+["ザ","za"],["ジ","ji"],["ズ","zu"],["ゼ","ze"],["ゾ","zo"],
+["ダ","da"],["ヂ","ji"],["ヅ","zu"],["デ","de"],["ド","do"],
+["バ","ba"],["ビ","bi"],["ブ","bu"],["ベ","be"],["ボ","bo"],
+["パ","pa"],["ピ","pi"],["プ","pu"],["ペ","pe"],["ポ","po"]];
+// [kanji, romaji reading, meaning in Russian]
+const KANJI_RAW = [
+["一","ichi","один"],["二","ni","два"],["三","san","три"],["四","yon","четыре"],["五","go","пять"],
+["六","roku","шесть"],["七","nana","семь"],["八","hachi","восемь"],["九","kyuu","девять"],["十","juu","десять"],
+["百","hyaku","сто"],["千","sen","тысяча"],["万","man","десять тысяч"],["円","en","иена, круг"],
+["日","hi","день, солнце"],["月","tsuki","месяц, луна"],["火","hi","огонь"],["水","mizu","вода"],
+["木","ki","дерево"],["金","kane","золото, деньги"],["土","tsuchi","земля"],["曜","you","день недели"],
+["年","toshi","год"],["時","toki","время, час"],["分","fun","минута, понимать"],["半","han","половина"],
+["週","shuu","неделя"],["今","ima","сейчас"],["先","saki","раньше, впереди"],["後","ato","после, позади"],
+["前","mae","перед, до"],["毎","mai","каждый"],
+["人","hito","человек"],["子","ko","ребёнок"],["女","onna","женщина"],["男","otoko","мужчина"],
+["母","haha","мать"],["父","chichi","отец"],["友","tomo","друг"],["私","watashi","я"],["名","na","имя"],
+["兄","ani","старший брат"],["姉","ane","старшая сестра"],["弟","otouto","младший брат"],["妹","imouto","младшая сестра"],
+["山","yama","гора"],["川","kawa","река"],["天","ten","небо"],["空","sora","небо, пустой"],
+["気","ki","дух, энергия"],["雨","ame","дождь"],["花","hana","цветок"],["石","ishi","камень"],
+["林","hayashi","лесок"],["森","mori","лес"],
+["上","ue","верх"],["下","shita","низ"],["中","naka","середина"],["外","soto","снаружи"],
+["右","migi","право"],["左","hidari","лево"],["北","kita","север"],["南","minami","юг"],
+["東","higashi","восток"],["西","nishi","запад"],
+["大","oo","большой"],["小","chii","маленький"],["多","ooi","много"],["少","suko","мало"],
+["高","taka","высокий, дорогой"],["安","yasu","дешёвый, спокойный"],["新","atara","новый"],
+["古","furu","старый"],["長","naga","длинный"],["早","haya","ранний, быстрый"],
+["行","i","идти"],["来","ku","приходить"],["出","de","выходить"],["入","hai","входить"],
+["見","mi","видеть"],["聞","ki","слышать, спрашивать"],["話","hana","говорить"],["読","yo","читать"],
+["書","ka","писать"],["食","ta","есть, кушать"],["飲","no","пить"],["買","ka","покупать"],
+["立","ta","стоять"],["休","yasu","отдыхать"],["歩","aru","идти пешком"],["会","a","встречать"],
+["目","me","глаз"],["耳","mimi","ухо"],["口","kuchi","рот"],["手","te","рука"],["足","ashi","нога"],
+["学","mana","учиться"],["校","kou","школа"],["生","sei","жизнь, рождение"],["国","kuni","страна"],
+["家","ie","дом"],["店","mise","магазин"],["車","kuruma","машина"],["電","den","электричество"],
+["語","go","язык"],["何","nani","что"],["力","chikara","сила"],["白","shiro","белый"],
+["赤","aka","красный"],["青","ao","синий"],["間","aida","промежуток"],["方","kata","сторона, способ"],
+["駅","eki","станция"],["道","michi","дорога"]
+];
+
+// Starter N4 kanji set — will grow over time. Meanings/readings in Russian.
+const KANJI_N4_RAW = [
+["同","dou","одинаковый"],["事","koto","дело, вещь"],["自","ji","сам"],["社","sha","компания, храм"],
+["発","hatsu","отправление, вспышка"],["者","mono","человек (формально)"],["業","gyou","дело, профессия"],
+["地","chi","земля"],["動","dou","двигаться"],["用","you","использование"],["度","do","раз, градус"],
+["強","kyou","сильный"],["弱","jaku","слабый"],["建","ken","строить"],["起","oki","вставать, просыпаться"],
+["寝","ne","спать"],["死","shi","смерть"],["使","tsuka","использовать"],["働","hatara","работать"],
+["借","ka","занимать (деньги)"],["貸","ka","одалживать"],["返","kae","возвращать"],
+["集","atsu","собирать"],["習","nara","учиться, привыкать"],["教","oshi","учить, преподавать"],
+["主","shu","главный"],["有","yuu","иметь, существовать"],["無","mu","нет, отсутствие"],
+["悪","waru","плохой"],["楽","tano","приятный; музыка"],["悲","kana","грустный"],
+["太","futo","толстый"],["細","hoso","тонкий"],["重","omo","тяжёлый"],["軽","karu","лёгкий"],
+["明","aka","светлый, ясный"],["暗","kura","тёмный"],["心","kokoro","сердце, душа"],["体","tai","тело"],
+["顔","kao","лицо"],["頭","atama","голова"],["声","koe","голос"],["意","i","намерение, значение"],
+["味","aji","вкус"],["特","toku","особый"],["別","betsu","отдельный"],["全","zen","весь"],
+["部","bu","часть"],["屋","ya","дом, лавка"],["開","a","открывать"],["閉","shi","закрывать"],
+["始","haji","начинать"],["終","o","заканчивать"],["続","tsuzu","продолжать"],["決","ki","решать"],
+["忘","wasu","забывать"],["覚","obo","запоминать"],["考","kanga","думать, размышлять"],
+["思","omo","думать, чувствовать"],["知","shi","знать"],["違","chiga","отличаться"],
+["遅","oso","поздний, медленный"],["速","haya","быстрый"],["近","chika","близкий"],["遠","too","далёкий"],
+["洗","ara","мыть"],["送","oku","отправлять"],["受","uke","получать"],["渡","wata","передавать"],
+["持","mo","держать, иметь"],["運","un","перевозить; удача"],["転","ten","вращаться"],
+["走","hashi","бежать"],["泳","oyo","плавать"],["旅","ryo","путешествие"],["元","gen","происхождение, бодрость"],
+["台","dai","подставка, счётчик"],["所","sho","место"],["場","ba","место, площадка"],
+["昔","mukashi","давным-давно"],["若","waka","молодой"],["老","rou","старый (о людях)"],
+["選","era","выбирать"],["落","ochi","падать"],["拾","hiro","подбирать"],["捨","sute","выбрасывать"],
+["品","hin","товар, качество"]
+];
+const GRAMMAR_N4 = [
+  {point:"〜ている", explain:"продолженное действие или состояние-результат.", example:"今、本を 読んでいる。 — Сейчас я читаю книгу."},
+  {point:"〜なければならない", explain:"«должен, обязан сделать».", example:"明日、早く 起きなければならない。 — Завтра нужно рано встать."},
+  {point:"〜ことができる", explain:"«умею / могу делать» — способность.", example:"わたしは 日本語を 話すことができる。 — Я умею говорить по-японски."},
+  {point:"〜そうです", explain:"«похоже, что...» — вывод по внешнему виду.", example:"この 料理は おいしそうです。 — Эта еда выглядит вкусной."},
+  {point:"〜たら", explain:"условное «если / когда».", example:"雨が 降ったら、行きません。 — Если пойдёт дождь, не пойду."},
+  {point:"〜から / 〜ので", explain:"причина — «потому что».", example:"忙しいから、休みます。 — Так как занят, отдохну."},
+  {point:"〜てあげる／〜てもらう／〜てくれる", explain:"давать или получать услугу-действие.", example:"友だちが 手伝ってくれた。 — Друг мне помог."},
+  {point:"〜すぎる", explain:"«слишком» — избыточность признака.", example:"この かばんは 高すぎる。 — Эта сумка слишком дорогая."}
+];
+function renderGrammarN4(){
+  document.getElementById('grammarListN4').innerHTML = GRAMMAR_N4.map(g=>
+    '<div class="grammar-item"><span class="g-point">'+g.point+'</span>'+g.explain+'<div class="g-example">'+g.example+'</div></div>'
+  ).join('');
+}
+
+// Starter N3 kanji set — will grow over time.
+const KANJI_N3_RAW = [
+["政","sei","политика"],["経","kei","управление, экономика"],["済","zai","заканчивать; помощь"],["法","hou","закон"],
+["制","sei","система"],["情","jou","чувство"],["報","hou","сообщение"],["関","kan","связь, застава"],
+["係","kei","отношение"],["約","yaku","обещание, примерно"],["験","ken","испытание, опыт"],
+["査","sa","проверка"],["態","tai","состояние"],["状","jou","состояние, вид"],
+["況","kyou","обстановка"],["果","ka","результат, плод"],["原","gen","исток, равнина"],["因","in","причина"],
+["理","ri","логика, причина"],["由","yuu","причина, повод"],["的","teki","суффикс «-ический»"],["性","sei","природа, пол"],
+["点","ten","точка, балл"],["際","sai","момент, международный"],["合","gou","соответствие, встреча"],["各","kaku","каждый"],
+["最","sai","самый"],["初","sho","начало"],["終","shuu","конец"],["変","hen","изменение"],
+["化","ka","превращение"],["加","ka","добавление"],["増","zou","увеличение"],["減","gen","уменьшение"],
+["続","zoku","продолжение"],["以","i","с, от (граница)"],["内","nai","внутри"],["外","gai","снаружи"],
+["現","gen","настоящий, являть"],["実","jitsu","реальность"],["確","kaku","точность"],["認","nin","признание"]
+];
+const GRAMMAR_N3 = [
+  {point:"〜ばかり", explain:"«только что сделал» или «только и делает, что...».", example:"食べたばかりです。 — Я только что поел."},
+  {point:"〜ようになる", explain:"постепенное изменение — «стало так, что...».", example:"漢字が 読めるようになった。 — Я стал уметь читать кандзи."},
+  {point:"〜みたいだ／〜らしい", explain:"предположение по внешним признакам или слухам.", example:"雨が 降るらしい。 — Похоже, будет дождь."},
+  {point:"〜ば", explain:"условная форма «если».", example:"急げば 間に合う。 — Если поторопиться, успеем."},
+  {point:"〜のに", explain:"«хотя, несмотря на» — с оттенком удивления/сожаления.", example:"高いのに 買った。 — Несмотря на то что дорого, купил."},
+  {point:"〜させる／〜される", explain:"каузативный и страдательный залог.", example:"先生が 学生に 書かせる。 — Учитель заставляет студента писать."},
+  {point:"〜わけだ", explain:"логический вывод — «значит, получается что».", example:"道理で 寒いわけだ。 — Неудивительно, что холодно."},
+  {point:"〜つつ", explain:"«одновременно делая» (книжный вариант 〜ながら).", example:"景色を 見つつ 歩く。 — Идти, глядя на пейзаж."}
+];
+var GRAMMAR_TARGET={n5:0, n4:GRAMMAR_N4.length, n3:GRAMMAR_N3.length}; // n5 задаётся ниже, после объявления GRAMMAR_N5
+function grammarDoneCount(level){
+  const prog=loadJSON('jp-gram-progress', {});
+  return Object.keys(prog).filter(k=>k.indexOf(level+'-g-')===0 && prog[k].done).length;
+}
+function renderGrammarLevel(level){
+  const data = level==='n5'?GRAMMAR_N5 : level==='n4'?GRAMMAR_N4 : GRAMMAR_N3;
+  const prog=loadJSON('jp-gram-progress', {});
+  const lbl=document.getElementById('grammarProgressLine');
+  if(lbl) lbl.textContent='Грамматика: '+grammarDoneCount(level)+'/'+GRAMMAR_TARGET[level]+(level==='n5'&&data.length<40?' (пока доступно тем: '+data.length+')':'');
+  document.getElementById('grammarList').innerHTML = data.map((g,i)=>{
+    const key=level+'-g-'+i, done=prog[key]&&prog[key].done;
+    return '<div class="grammar-item fade-in">'
+      +'<div class="g-head"><span class="g-point">'+g.point+'</span>'+(done?'<span class="g-done" id="gdone-'+key+'">✓ пройдено</span>':'<span id="gdone-'+key+'"></span>')+'</div>'
+      +g.explain+'<div class="g-example">'+g.example+'</div>'+(g.example2?'<div class="g-example">'+g.example2+'</div>':'')
+      +grammarExtraHTML(level,g,key)
+      +(g.quiz&&g.quiz.length?'<button class="chip g-testbtn" data-gkey="'+key+'" data-gi="'+i+'">Пройти тест</button><div class="g-quizbox hidden" id="gq-'+key+'"></div>':'')
+      +'</div>';
+  }).join('');
+  document.querySelectorAll('#grammarList .g-build').forEach(gbInit);
+}
+
+// --- N5 grammar extras: formula, hoverable examples, build-a-sentence exercise ---
+function grammarExtOf(level,g){ return (level==='n5' && typeof GRAMMAR_N5_EXT!=='undefined') ? GRAMMAR_N5_EXT[g.point] : null; }
+function glossJP(t){ return t.replace(/\[\[(.+?)\|(.*?)\]\]/g,(m,w,tr)=>'<span class="rw" tabindex="0"><span class="rw-tip">'+tr+'</span>'+w+'</span>'); }
+function grammarExtraHTML(level,g,key){
+  const x=grammarExtOf(level,g); if(!x) return '';
+  let h='<div class="g-struct"><b>Формула:</b> '+x.structure+'</div>';
+  h+=(x.ex||[]).map(e=>'<div class="g-ex2"><div class="g-jp">'+glossJP(e[0])+'</div><div class="g-rd">'+e[1]+'</div><div class="g-tr">'+e[2]+'</div></div>').join('');
+  if(x.build&&x.build.length) h+='<div class="g-build" id="gb-'+key+'" data-gkey="'+key+'"><div class="tile-hint" style="margin:0 0 6px">Практика: собери предложение (нажимай по порядку)</div><div class="g-answer"></div><div class="g-chips"></div><div class="g-fb"></div></div>';
+  return h;
+}
+const gbState={};
+function gbInit(box){
+  const key=box.dataset.gkey, g=GRAMMAR_N5.find((t,i)=>'n5-g-'+i===key), x=g&&grammarExtOf('n5',g); if(!x) return;
+  const chips=shuffle(x.build.map((w,i)=>({w,i})));
+  gbState[key]={x,chips,picked:[]};
+  gbDraw(box);
+}
+function gbDraw(box){
+  const st=gbState[box.dataset.gkey]; if(!st) return;
+  box.querySelector('.g-answer').textContent=st.picked.map(c=>c.w).join('');
+  box.querySelector('.g-chips').innerHTML=st.chips.filter(c=>!st.picked.includes(c)).map(c=>'<button class="chip" data-gbi="'+c.i+'">'+c.w+'</button>').join('')
+    +'<button class="chip" data-gbreset="1">↺</button>';
+}
+function gbCheck(box){
+  const st=gbState[box.dataset.gkey], fb=box.querySelector('.g-fb');
+  const ok=st.picked.map(c=>c.w).join('')===st.x.build.join('');
+  fb.textContent=ok?'✓ Правильно! '+st.x.build.join(''):'✗ Не совсем. Попробуй ещё раз: ↺';
+  if(ok){ addXP(2); buzz(12); } else buzz([30,40,30]);
+}
+let gtState=null;
+function startGrammarTopicQuiz(key,i,level){
+  const data = level==='n5'?GRAMMAR_N5 : level==='n4'?GRAMMAR_N4 : GRAMMAR_N3;
+  const topic=data[i]; if(!topic.quiz||!topic.quiz.length) return;
+  gtState={key,i,level,pool:shuffle([...topic.quiz]),qi:0,score:0,locked:false};
+  const box=document.getElementById('gq-'+key); box.classList.remove('hidden');
+  renderGrammarTopicQ();
+}
+function renderGrammarTopicQ(){
+  const box=document.getElementById('gq-'+gtState.key);
+  if(gtState.qi>=gtState.pool.length){
+    const total=gtState.pool.length, pct=Math.round(100*gtState.score/total);
+    const pass=gtState.score>=Math.ceil(total*0.7);
+    const prog=loadJSON('jp-gram-progress',{});
+    const prev=prog[gtState.key]||{done:false,bestPct:0};
+    prog[gtState.key]={done: pass||prev.done, bestPct: Math.max(pct, prev.bestPct)};
+    saveJSON('jp-gram-progress', prog);
+    box.innerHTML='<div class="g-result">'+(pass?'✅ ':'⚠️ ')+gtState.score+'/'+total+' ('+pct+'%) — '+(pass?'тема пройдена!':'нужно набрать 70%, попробуй ещё раз')+'</div><button class="chip g-testbtn" data-gkey="'+gtState.key+'" data-gi="'+gtState.i+'">Пройти ещё раз</button>';
+    const badge=document.getElementById('gdone-'+gtState.key);
+    if(badge && (pass||prev.done)) badge.className='g-done'; if(badge && (pass||prev.done)) badge.textContent='✓ пройдено';
+    const lbl=document.getElementById('grammarProgressLine');
+    if(lbl) lbl.textContent='Грамматика: '+grammarDoneCount(gtState.level)+'/'+GRAMMAR_TARGET[gtState.level];
+    addXP(pass?6:1);
+    return;
+  }
+  gtState.locked=false;
+  const item=gtState.pool[gtState.qi];
+  const opts=shuffle([item.a, ...shuffle(item.pool.filter(p=>p!==item.a)).slice(0,3)]);
+  box.innerHTML='<div class="g-q">'+item.q+'</div><div class="opts">'+opts.map(o=>'<button class="opt g-opt" data-gv="'+o.replace(/"/g,'&quot;')+'">'+o+'</button>').join('')+'</div><div class="next-hint" id="gqfb-'+gtState.key+'"></div>';
+}
+document.getElementById('grammarList').addEventListener('click', e=>{
+  const rw=e.target.closest('.rw');
+  if(rw){ const was=rw.classList.contains('show'); document.querySelectorAll('#grammarList .rw.show').forEach(n=>n.classList.remove('show')); if(!was) rw.classList.add('show'); return; }
+  const gbBox=e.target.closest('.g-build');
+  if(gbBox){
+    if(!gbState[gbBox.dataset.gkey]) gbInit(gbBox);
+    const st=gbState[gbBox.dataset.gkey]; if(!st) return;
+    const cb=e.target.closest('[data-gbi]'), rb=e.target.closest('[data-gbreset]');
+    if(rb){ st.picked=[]; gbBox.querySelector('.g-fb').textContent=''; gbDraw(gbBox); }
+    else if(cb){ const c=st.chips.find(c=>c.i===+cb.dataset.gbi); if(c&&!st.picked.includes(c)){ st.picked.push(c); gbDraw(gbBox); if(st.picked.length===st.chips.length) gbCheck(gbBox); } }
+    return;
+  }
+  const tb=e.target.closest('.g-testbtn');
+  if(tb){ startGrammarTopicQuiz(tb.dataset.gkey, +tb.dataset.gi, currentLevel); return; }
+  const ob=e.target.closest('.g-opt');
+  if(ob && gtState && !gtState.locked){
+    gtState.locked=true;
+    const item=gtState.pool[gtState.qi];
+    const correct=ob.dataset.gv===item.a;
+    const box=document.getElementById('gq-'+gtState.key);
+    box.querySelectorAll('.g-opt').forEach(b=>{ b.disabled=true; if(b.dataset.gv===item.a) b.classList.add('correct'); });
+    if(correct){ gtState.score++; buzz(12); } else { ob.classList.add('wrong'); buzz([30,40,30]); }
+    const fb=document.getElementById('gqfb-'+gtState.key); if(fb) fb.textContent=(correct?'✓ Верно! ':'✗ Правильно: '+item.a+'. ')+(item.note&&item.note!=='...'?item.note:'');
+    setTimeout(()=>{ gtState.qi++; renderGrammarTopicQ(); }, 1300);
+  }
+});
+
+// --- Practice cloze pools (particle / word in blank) ---
+const PRACTICE_N4 = [
+  {q:"今、本を ___ います。", a:"読んで", note:"〜ている — продолженное действие, здесь «читаю»."},
+  {q:"明日、早く ___ なければなりません。", a:"起き", note:"〜なければならない — «должен сделать»."},
+  {q:"わたしは 日本語 ___ 話すことができます。", a:"を", note:"を отмечает объект способности «уметь говорить»."},
+  {q:"雨が 降っ ___ 、行きません。", a:"たら", note:"〜たら — условное «если / когда»."},
+  {q:"忙しい ___ 、休みます。", a:"から", note:"から — причина «потому что»."},
+  {q:"友だち ___ 手伝ってくれた。", a:"が", note:"が вводит того, кто выполнил действие для говорящего."},
+  {q:"この かばんは 高 ___ ぎる。", a:"す", note:"〜すぎる — «слишком»; основа прилагательного + すぎる."}
+];
+const PRACTICE_N3 = [
+  {q:"食べた ___ です。", a:"ばかり", note:"〜ばかり — «только что сделал»."},
+  {q:"漢字が 読める ___ なった。", a:"ように", note:"〜ようになる — постепенное изменение."},
+  {q:"雨が 降る ___ です。", a:"らしい", note:"らしい — предположение по слухам/признакам."},
+  {q:"急げ ___ 間に合う。", a:"ば", note:"〜ば — условная форма «если»."},
+  {q:"高い ___ 買った。", a:"のに", note:"〜のに — «хотя, несмотря на»."},
+  {q:"先生が 学生に 書か ___ る。", a:"せ", note:"〜させる — каузативный залог «заставлять»."}
+];
+// --- Kanji cloze test (fill the blank with the right kanji) ---
+const KANJI_CLOZE = {
+  n5:[
+    ["今___、学校に 行きます。","日",["日","月","木","水"]],
+    ["わたしの ___は 医者です。","父",["父","母","友","兄"]],
+    ["公園で ___を 見ました。","花",["花","山","川","石"]],
+    ["この ___は 大きいです。","家",["家","車","店","国"]],
+    ["___曜日に 休みます。","水",["水","火","木","金"]],
+    ["朝、___を 食べます。","水",["水","飯","魚","肉"]],
+    ["駅の ___に 立っています。","前",["前","後","中","外"]],
+    ["___を 見て、道が わかりました。","地",["地","天","空","川"]]
+  ],
+  n4:[
+    ["会社は ___時に 始まります。","九",["九","同","業","用"]],
+    ["昨日、友だちと ___しました。","話",["話","動","働","集"]],
+    ["彼は とても ___い 人です。","強",["強","弱","重","軽"]],
+    ["朝早く ___きます。","起",["起","寝","建","働"]],
+    ["この 問題は とても ___しいです。","難",["難","悲","楽","太"]],
+    ["先生が わたしに 日本語を ___てくれました。","教",["教","習","考","知"]],
+    ["彼女は いつも ___いです。","明",["明","暗","太","細"]]
+  ],
+  n3:[
+    ["___の 問題を 話し合いました。","政",["政","経","法","情"]],
+    ["会社の ___が 変わりました。","制",["制","係","約","験"]],
+    ["その ___で 結果が 決まった。","状",["状","況","果","原"]],
+    ["彼は ___的な 性格です。","理",["理","的","点","合"]],
+    ["物価が ___しました。","増",["増","減","加","化"]],
+    ["問題の ___を 調べます。","原",["原","因","由","内"]]
+  ]
+};
+function toKanaObjs(raw){ return raw.map(([c,r])=>({char:c, quiz:r, alt:'<span>'+r+'</span>'})); }
+function toKanjiObjs(raw){ return raw.map(([c,r,m])=>({char:c, quiz:m, alt:'<span>'+r+'</span><span class="meaning">'+m+'</span>'})); }
+
+// --- Vocabulary (Словарь) — starter sets per level, will grow ---
+// [word, reading, translation, example, exampleTranslation]
+const WORDS_N5 = [
+["学校","がっこう","школа","私は毎日学校へ行きます。","Я каждый день иду в школу."],
+["先生","せんせい","учитель","先生はやさしいです。","Учитель добрый."],
+["友だち","ともだち","друг","友だちと話します。","Разговариваю с другом."],
+["水","みず","вода","水を飲みます。","Пью воду."],
+["食べ物","たべもの","еда","食べ物が好きです。","Мне нравится еда."],
+["電車","でんしゃ","поезд","電車で行きます。","Еду на поезде."],
+["天気","てんき","погода","今日は天気がいいです。","Сегодня хорошая погода."],
+["買い物","かいもの","покупки","買い物に行きます。","Иду за покупками."],
+["仕事","しごと","работа","仕事が忙しいです。","Работа занята (много работы)."],
+["時間","じかん","время","時間がありません。","Нет времени."],
+["家族","かぞく","семья","家族は四人です。","В семье четыре человека."],
+["映画","えいが","фильм","映画を見ます。","Смотрю фильм."],
+["花","はな","цветок","花がきれいです。","Цветок красивый."],
+["きれい","きれい","красивый, чистый","この部屋はきれいです。","Эта комната чистая."],
+["大きい","おおきい","большой","大きい山です。","Это большая гора."],
+["小さい","ちいさい","маленький","小さい子どもです。","Это маленький ребёнок."],
+["高い","たかい","высокий, дорогой","このかばんは高いです。","Эта сумка дорогая."],
+["安い","やすい","дешёвый","この店は安いです。","Этот магазин дешёвый."],
+["新しい","あたらしい","новый","新しい車です。","Это новая машина."],
+["古い","ふるい","старый","古い家です。","Это старый дом."],
+["忙しい","いそがしい","занятой","今日は忙しいです。","Сегодня я занят."],
+["休み","やすみ","отдых, выходной","今日は休みです。","Сегодня выходной."],
+["たのしい","たのしい","весёлый, приятный","毎日がたのしいです。","Каждый день весёлый."],
+["おいしい","おいしい","вкусный","このパンはおいしいです。","Этот хлеб вкусный."],
+["テレビ","テレビ","телевизор","テレビを見ます。","Смотрю телевизор."],
+["カメラ","カメラ","камера","新しいカメラを買いました。","Купил новую камеру."],
+["コーヒー","コーヒー","кофе","朝、コーヒーを飲みます。","Утром пью кофе."]
+];
+const WORDS_N4 = [
+["経験","けいけん","опыт","いい経験になりました。","Это стало хорошим опытом."],
+["約束","やくそく","обещание","約束を守ります。","Держу обещание."],
+["習慣","しゅうかん","привычка","いい習慣を作ります。","Формирую хорошую привычку."],
+["性格","せいかく","характер","彼は明るい性格です。","У него весёлый характер."],
+["景色","けしき","пейзаж","景色がきれいです。","Красивый пейзаж."],
+["調子","ちょうし","самочувствие","調子はどうですか。","Как самочувствие?"],
+["都合","つごう","удобство (по времени)","都合が悪いです。","Мне неудобно (по времени)."],
+["機会","きかい","возможность, шанс","いい機会です。","Хорошая возможность."],
+["努力","どりょく","старание","努力しています。","Стараюсь."],
+["原因","げんいん","причина","原因を調べます。","Исследую причину."],
+["動物","どうぶつ","животное","動物が好きです。","Мне нравятся животные."],
+["有名","ゆうめい","известный","有名な人です。","Это известный человек."],
+["大事","だいじ","важный","時間は大事です。","Время важно."],
+["心配","しんぱい","беспокойство","心配しないでください。","Не беспокойтесь."],
+["忘れる","わすれる","забывать","約束を忘れました。","Забыл про обещание."],
+["覚える","おぼえる","запоминать","漢字を覚えます。","Запоминаю кандзи."],
+["続ける","つづける","продолжать","勉強を続けます。","Продолжаю учиться."],
+["カラオケ","カラオケ","караоке","カラオケに行きましょう。","Пойдём в караоке."],
+["レストラン","レストラン","ресторан","レストランで食べます。","Ем в ресторане."],
+["のんびり","のんびり","неспешно","休みはのんびりします。","В выходные отдыхаю неспешно."]
+];
+const WORDS_N3 = [
+["制度","せいど","система","新しい制度が始まりました。","Началась новая система."],
+["影響","えいきょう","влияние","天気に影響されます。","Зависит от погоды (испытывает влияние)."],
+["状況","じょうきょう","ситуация","状況が変わりました。","Ситуация изменилась."],
+["方法","ほうほう","способ","いい方法を考えます。","Придумываю хороший способ."],
+["責任","せきにん","ответственность","責任を持ちます。","Беру на себя ответственность."],
+["傾向","けいこう","тенденция","増える傾向があります。","Есть тенденция к увеличению."],
+["対象","たいしょう","объект (изучения/действия)","調査の対象です。","Это объект исследования."],
+["価値","かち","ценность","この本は価値があります。","Эта книга имеет ценность."],
+["情報","じょうほう","информация","情報を確認します。","Проверяю информацию."],
+["関係","かんけい","отношение, связь","二人の関係はいいです。","У них хорошие отношения."],
+["実際","じっさい","на самом деле","実際はちがいます。","На самом деле это не так."],
+["増加","ぞうか","увеличение","人口が増加しています。","Население увеличивается."],
+["減少","げんしょう","уменьшение","数が減少しました。","Число уменьшилось."],
+["スマホ","スマホ","смартфон","スマホで調べます。","Ищу в смартфоне."],
+["ゆっくり","ゆっくり","медленно, не спеша","ゆっくり話してください。","Говорите, пожалуйста, медленнее."],
+["とにかく","とにかく","в любом случае","とにかくやってみます。","В любом случае попробую."]
+];
+// Слова из n5-data.js -> WORDS_N5 (без дублей). Формат: слово|чтение|перевод|категория
+(function(){
+  if(typeof window.N5_WORDS_RAW!=='string') return;
+  const seen=new Set(WORDS_N5.map(w=>w[0]+'|'+w[1]));
+  window.N5_WORDS_RAW.split('\n').forEach(line=>{
+    const p=line.trim().split('|'); if(p.length<3) return;
+    const k=p[0]+'|'+p[1]; if(seen.has(k)) return; seen.add(k);
+    WORDS_N5.push([p[0],p[1],p[2]||'','','',p[3]||'other']);
+  });
+})();
+function wordsFor(level){ return level==='n5'?WORDS_N5 : level==='n4'?WORDS_N4 : WORDS_N3; }
+const CAT_LABELS={people:'Люди',home:'Дом',food:'Еда',actions:'Действия',places:'Места',time:'Время',adjectives:'Прилагательные',body:'Тело',shopping:'Покупки',nature:'Природа',function:'Служебные',other:'Другое'};
+let wordsQuery='', wordsCat='all';
+function renderWordsCats(level){
+  const cats=Array.from(new Set(wordsFor(level).map(w=>w[5]||'other')));
+  const row=document.getElementById('wordsCatRow'); if(!row) return;
+  row.innerHTML='<button class="chip cat-chip'+(wordsCat==='all'?' active':'')+'" data-wc="all">Все</button>'+
+    cats.map(c=>'<button class="chip cat-chip'+(wordsCat===c?' active':'')+'" data-wc="'+c+'">'+(CAT_LABELS[c]||c)+'</button>').join('');
+  row.querySelectorAll('[data-wc]').forEach(b=> b.onclick=()=>{ wordsCat=b.dataset.wc; renderWordsLevel(currentLevel); });
+}
+const WORDS_PAGE=60;
+let wordsLimit=WORDS_PAGE, wordsSig='', wordsView='compact';
+try{ wordsView=localStorage.getItem('jp-words-view')==='wide'?'wide':'compact'; }catch(e){}
+document.querySelectorAll('#wordsViewRow [data-wv]').forEach(b=>b.onclick=()=>{
+  wordsView=b.dataset.wv; try{ localStorage.setItem('jp-words-view',wordsView); }catch(e){}
+  renderWordsLevel(currentLevel);
+});
+function renderWordsLevel(level){
+  renderWordsCats(level);
+  const el=document.getElementById('wordsList'); if(!el) return; el.innerHTML='';
+  el.classList.toggle('wl-compact', wordsView==='compact');
+  document.querySelectorAll('#wordsViewRow [data-wv]').forEach(b=>b.classList.toggle('active', b.dataset.wv===wordsView));
+  const q=wordsQuery.trim().toLowerCase();
+  const sig=level+'|'+wordsCat+'|'+q; if(sig!==wordsSig){ wordsSig=sig; wordsLimit=WORDS_PAGE; }
+  const list=wordsFor(level).filter(([w,r,tr,ex,extr,cat])=>{
+    if(wordsCat!=='all' && (cat||'other')!==wordsCat) return false;
+    if(!q) return true;
+    return w.toLowerCase().includes(q)||r.toLowerCase().includes(q)||tr.toLowerCase().includes(q);
+  });
+  const shown=list.slice(0,wordsLimit);
+  const cnt=document.getElementById('wordsCount'); if(cnt) cnt.textContent='Показано '+shown.length+' из '+list.length+(list.length!==wordsFor(level).length?' (всего '+wordsFor(level).length+')':'')+' слов';
+  shown.forEach(([w,r,tr,ex,extr])=>{
+    const card=document.createElement('div'); card.className='word-card';
+    card.innerHTML='<div class="w-head"><span class="w-jp">'+w+'</span><span class="w-reading">'+r+'</span><span class="w-tr">'+tr+'</span><span class="snd" role="button" data-say="'+w+'" aria-label="Озвучить">🔊</span></div>'+
+      (ex?'<div class="w-ex"><span class="snd" role="button" data-say="'+ex.replace(/"/g,'')+'" aria-label="Озвучить пример">🔊</span> <span class="rw" tabindex="0">'+w+'<span class="rw-tip">'+tr+'</span></span>'+ex.replace(w,'')+'<div style="margin-top:6px;color:var(--ink-soft);font-size:13px;">'+extr+'</div></div>':'');
+    card.onclick=()=>card.classList.toggle('open');
+    el.appendChild(card);
+  });
+  if(!list.length){ el.innerHTML='<p class="tile-hint">Ничего не найдено</p>'; }
+  if(list.length>shown.length){
+    const more=document.createElement('button'); more.className='big wmore';
+    more.textContent='Показать ещё ('+Math.min(WORDS_PAGE,list.length-shown.length)+')';
+    more.onclick=()=>{ wordsLimit+=WORDS_PAGE; renderWordsLevel(level); };
+    el.appendChild(more);
+  }
+}
+
+// --- localStorage: mistakes + test history ("система ошибок" + прогресс) ---
+function loadJSON(key, fallback){ try{ const v=localStorage.getItem(key); return v?JSON.parse(v):fallback; }catch(e){ return fallback; } }
+function saveJSON(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+function getMistakes(){ return loadJSON('jp-mistakes', {}); }
+function bumpMistake(key, correct){
+  const m=getMistakes();
+  m[key] = correct ? Math.max(0,(m[key]||0)-1) : (m[key]||0)+2;
+  if(m[key]===0) delete m[key];
+  saveJSON('jp-mistakes', m);
+  onAnswer(key, correct);
+}
+function recordTestResult(level, score, total){
+  const h=loadJSON('jp-history', []);
+  h.push({level, score, total, date:new Date().toISOString()});
+  saveJSON('jp-history', h.slice(-50));
+}
+function bestNextLevel(){
+  const h=loadJSON('jp-history', []);
+  return 'n5'; // N4–N3 закрыты
+}
+
+// --- Mixed weighted level exam (words + kanji + grammar) ---
+function buildExamPool(level){
+  const pool=[];
+  wordsFor(level).forEach(([w,r,tr])=>{
+    const others=shuffle(wordsFor(level).filter(x=>x[0]!==w)).slice(0,3).map(x=>x[2]);
+    pool.push({key:'w:'+w, prompt:'Что означает слово «'+w+'» ('+r+')?', correct:tr, options:shuffle([tr,...others])});
+  });
+  KANJI_CLOZE[level].forEach(([sent,correct,opts])=>{
+    pool.push({key:'k:'+sent, prompt:sent.replace('___','<span class="cloze-blank">？</span>'), correct, options:shuffle([...opts])});
+  });
+  practiceData(level).forEach(p=>{
+    const allA=practiceData(level).map(x=>x.a);
+    const wrongs=shuffle(allA.filter(a=>a!==p.a)).slice(0,3);
+    pool.push({key:'g:'+p.q, prompt:p.q.replace('___','<span class="cloze-blank">？</span>'), correct:p.a, options:shuffle([p.a,...new Set(wrongs)]), note:p.note});
+  });
+  return pool;
+}
+const EXAM_LEN=10;
+let examPool=[], eCi=0, eScore=0, eLocked=false, examLevel='n5';
+function startExam(){
+  examLevel=currentLevel;
+  const full=buildExamPool(examLevel);
+  const mistakes=getMistakes();
+  const weighted=[];
+  full.forEach(q=>{ const w=1+(mistakes[q.key]||0); for(let i=0;i<w;i++) weighted.push(q); });
+  const chosen=[]; const usedKeys=new Set();
+  const shuffled=shuffle(weighted);
+  for(const q of shuffled){ if(chosen.length>=EXAM_LEN) break; if(usedKeys.has(q.key)) continue; usedKeys.add(q.key); chosen.push(q); }
+  examPool=chosen; eCi=0; eScore=0; eLocked=false; renderExam();
+}
+function renderExam(){
+  const total=examPool.length;
+  if(eCi>=total){
+    document.getElementById('examSent').textContent='🎉';
+    document.getElementById('examOpts').innerHTML='';
+    document.getElementById('examNote').textContent='Готово! Верно '+eScore+' из '+total+' ('+Math.round(100*eScore/(total||1))+'%).';
+    document.getElementById('examProgress').textContent='Тест завершён';
+    recordTestResult(examLevel, eScore, total);
+    const again=document.createElement('button'); again.className='chip active'; again.style.marginTop='10px';
+    again.textContent='Новый тест'; again.onclick=startExam;
+    document.getElementById('examOpts').appendChild(again);
+    return;
+  }
+  eLocked=false;
+  const q=examPool[eCi];
+  document.getElementById('examSent').innerHTML=q.prompt;
+  document.getElementById('examProgress').textContent='Вопрос '+(eCi+1)+' / '+total;
+  document.getElementById('examScore').textContent='Верно: '+eScore;
+  document.getElementById('examNote').textContent='';
+  const optsEl=document.getElementById('examOpts'); optsEl.innerHTML='';
+  q.options.forEach(opt=>{
+    const b=document.createElement('button'); b.className='opt'; b.textContent=opt;
+    b.onclick=()=>{
+      if(eLocked) return; eLocked=true;
+      const ok=opt===q.correct;
+      bumpMistake(q.key, ok);
+      if(ok){ b.classList.add('correct'); eScore++; document.getElementById('examNote').textContent='Верно!'+(q.note?(' — '+q.note):''); }
+      else{
+        b.classList.add('wrong');
+        document.getElementById('examNote').textContent='Правильно: '+q.correct+(q.note?(' — '+q.note):'');
+        [...optsEl.children].find(c=>c.textContent===q.correct)?.classList.add('correct');
+      }
+      [...optsEl.children].forEach(c=>c.disabled=true);
+      document.getElementById('examScore').textContent='Верно: '+eScore;
+      setTimeout(()=>{ eCi++; renderExam(); }, 1100);
+    };
+    optsEl.appendChild(b);
+  });
+}
+
+// --- Progress page ---
+function renderProgress(){
+  const h=loadJSON('jp-history', []);
+  const mistakes=getMistakes();
+  const body=document.getElementById('progressBody');
+  let html=progressTop();
+  ['n5','n4','n3'].forEach(lv=>{
+    const tests=h.filter(t=>t.level===lv);
+    const avg=tests.length ? Math.round(100*tests.reduce((s,t)=>s+t.score/t.total,0)/tests.length) : null;
+    html+='<div class="stat-card"><h3>'+lv.toUpperCase()+'</h3>'+
+      '<div class="stat-row"><span>Слов в базе</span><span>'+wordsFor(lv).length+'</span></div>'+
+      '<div class="stat-row"><span>Кандзи в базе</span><span>'+levelKanjiSet(lv).length+'</span></div>'+
+      '<div class="stat-row"><span>Тестов пройдено</span><span>'+tests.length+'</span></div>'+
+      '<div class="stat-row"><span>Средний результат</span><span>'+(avg===null?'—':avg+'%')+'</span></div>'+
+      '</div>';
+  });
+  const topMistakes=Object.entries(mistakes).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  html+='<div class="stat-card fade-in"><h3>Слабые места</h3>';
+  html+= topMistakes.length ? topMistakes.map(([k])=>'<span class="mistake-tag">'+k.slice(2)+'</span>').join('') : '<p class="tile-hint" style="margin:0">Пока нет ошибок — отличная работа!</p>';
+  html+='</div>';
+  body.innerHTML=html;
+}
+
+// --- Reading texts (mini stories), grow with level; [[word|translation]] = hoverable ---
+const READING = {
+  n5:"[[私|я]]は[[学生|студент]]です。[[毎日|каждый день]][[学校|школа]]に[[行きます|иду]]。[[友だち|друг]]と[[話します|разговариваю]]。[[家|дом]]で[[本|книгу]]を[[読みます|читаю]]。[[天気|погода]]が[[いい|хорошая]]ので、[[公園|парк]]へ[[行きました|пошёл]]。[[公園|парк]]に[[きれいな|красивый]][[花|цветок]]が[[あります|есть]]。[[友だち|друг]]と[[写真|фото]]を[[撮りました|сфотографировал]]。[[夜|вечером]]は[[おいしい|вкусную]][[食べ物|еду]]を[[食べました|съел]]。とても[[楽しい|весёлый]][[一日|день]]でした。",
+  n4:"[[私|я]]は[[毎朝|каждое утро]][[早く|рано]][[起きます|встаю]]。[[今|сейчас]][[日本語|японский язык]]を[[勉強|учу]]しています。[[漢字|кандзи]]を[[習う|учить]]ことが[[好き|нравится]]です。[[友だち|друг]]が[[手伝って|помогает]]くれました。[[少し|немного]][[難しい|трудно]]ですが、[[楽しい|весело]]です。[[週末|на выходных]]は[[友だち|с другом]]と[[レストラン|ресторан]]へ[[行く|идти]][[約束|обещание]]をしました。[[天気|погода]]が[[よければ|если будет хорошая]]、[[景色|пейзаж]]が[[きれいな|красивый]][[公園|парк]]も[[歩きたい|хочу пройтись]]です。[[新しい|новую]][[習慣|привычку]]を[[始めました|начал]]、[[毎日|каждый день]][[少し|немного]][[運動|заниматься спортом]]する[[ことです|вот что]]。[[忘れないように|чтобы не забыть]]、[[手帳|блокнот]]に[[書きます|записываю]]。",
+  n3:"[[経済|экономика]]の[[状況|ситуация]]は[[少しずつ|постепенно]][[変化|меняется]]しています。[[多く|многие]]の[[会社|компании]]が[[新しい|новую]][[制度|систему]]を[[始めました|начали]]。[[彼|он]]は[[漢字|кандзи]]が[[読める|мочь читать]]ようになった。[[理由|причину]]を[[調べる|исследовать]]と、[[原因|причина]]が[[わかりました|стало понятно]]。[[以前|раньше]]より[[便利|удобнее]]に[[なった|стало]]わけです。[[最近|в последнее время]]、[[情報|информации]]が[[増加|увеличивается]]している[[らしい|похоже]]です。[[人々|людей]]の[[関係|отношения]]も[[少しずつ|постепенно]][[変わりつつ|меняются]]あります。[[実際|на самом деле]]、[[スマホ|смартфон]]なしでは[[生活|жить]]できないと[[思う|думают]][[人|людей]]が[[多い|многие]]です。[[最初|сначала]]は[[不便|неудобно]]だったのに、[[今|сейчас]]は[[便利|удобно]]に[[感じます|чувствуется]]。"
+};
+function renderReading(level, boxId){
+  const box=document.getElementById(boxId || 'readingBox');
+  const html = READING[level].replace(/\[\[(.+?)\|(.*?)\]\]/g, (m,w,tr)=>
+    '<span class="rw" tabindex="0"><span class="rw-tip">'+tr+'</span>'+w+'</span>'
+  );
+  box.innerHTML = '<div class="reading-text fade-in">'+html+'</div>';
+  box.querySelectorAll('.rw').forEach(el=>{
+    el.addEventListener('click', ()=> el.classList.toggle('show'));
+  });
+}
+
+// --- Level / tab state ---
+let currentLevel='n5', currentCTab='kanji';
+function levelKanjiSet(level){
+  return level==='n5'?toKanjiObjs(KANJI_RAW) : level==='n4'?toKanjiObjs(KANJI_N4_RAW) : toKanjiObjs(KANJI_N3_RAW);
+}
+function renderCourseKanjiCards(){ buildTiles(document.getElementById('courseKanjiGrid'), levelKanjiSet(currentLevel)); }
+
+function renderCourse(){
+  document.getElementById('courseKanjiPane').classList.toggle('hidden', currentCTab!=='kanji');
+  document.getElementById('courseWordsPane').classList.toggle('hidden', currentCTab!=='words');
+  document.getElementById('courseGrammarPane').classList.toggle('hidden', currentCTab!=='grammar');
+  document.getElementById('courseExamPane').classList.toggle('hidden', currentCTab!=='exam');
+  if(currentCTab==='kanji'){ renderCourseKanjiCards(); startKanjiCloze(); }
+  else if(currentCTab==='words'){ wordsCat='all'; renderWordsLevel(currentLevel); }
+  else if(currentCTab==='grammar'){ renderGrammarLevel(currentLevel); }
+  else if(currentCTab==='exam'){ renderReading(currentLevel, 'examReadingBox'); startExam(); }
+}
+(function(){
+  const s=document.getElementById('wordsSearch');
+  if(s) s.addEventListener('input', ()=>{ wordsQuery=s.value; renderWordsLevel(currentLevel); });
+})();
+document.getElementById('courseTabs').addEventListener('click', e=>{
+  const btn=e.target.closest('button'); if(!btn) return;
+  document.querySelectorAll('#courseTabs button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentCTab=btn.dataset.ctab;
+  renderCourse();
+});
+document.getElementById('kanjiSubTabs').addEventListener('click', e=>{
+  const btn=e.target.closest('button'); if(!btn) return;
+  document.querySelectorAll('#kanjiSubTabs button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const mode=btn.dataset.ksub;
+  document.getElementById('kanjiCardsMode').classList.toggle('hidden', mode!=='cards');
+  document.getElementById('kanjiTestMode').classList.toggle('hidden', mode!=='test');
+  if(mode==='test') startKanjiCloze();
+});
+
+// --- Kanji fill-in-the-blank test ---
+const CLOZE_LEN=8;
+let kClozePool=[], kCi=0, kScore=0, kLocked=false;
+function startKanjiCloze(){
+  kClozePool=shuffle([...KANJI_CLOZE[currentLevel]]);
+  kCi=0; kScore=0; kLocked=false; renderKanjiCloze();
+}
+function renderKanjiCloze(){
+  const total=kClozePool.length;
+  if(kCi>=total){
+    document.getElementById('kanjiClozeSent').textContent='🎉';
+    document.getElementById('kanjiClozeOpts').innerHTML='';
+    document.getElementById('kanjiClozeNote').textContent='Готово! Верно '+kScore+' из '+total+'.';
+    document.getElementById('kanjiClozeProgress').textContent='Тест завершён';
+    const again=document.createElement('button'); again.className='chip active'; again.style.marginTop='10px';
+    again.textContent='Пройти ещё раз'; again.onclick=startKanjiCloze;
+    document.getElementById('kanjiClozeOpts').appendChild(again);
+    return;
+  }
+  kLocked=false;
+  const [sent, correct, options]=kClozePool[kCi];
+  document.getElementById('kanjiClozeSent').innerHTML = sent.replace('___','<span class="cloze-blank">？</span>');
+  document.getElementById('kanjiClozeProgress').textContent='Вопрос '+(kCi+1)+' / '+total;
+  document.getElementById('kanjiClozeScore').textContent='Верно: '+kScore;
+  document.getElementById('kanjiClozeNote').textContent='';
+  const optsEl=document.getElementById('kanjiClozeOpts'); optsEl.innerHTML='';
+  shuffle([...options]).forEach(opt=>{
+    const b=document.createElement('button'); b.className='opt'; b.textContent=opt;
+    b.onclick=()=>{
+      if(kLocked) return; kLocked=true;
+      const ok=opt===correct;
+      if(ok){ b.classList.add('correct'); kScore++; document.getElementById('kanjiClozeNote').textContent='Верно!'; }
+      else{
+        b.classList.add('wrong');
+        document.getElementById('kanjiClozeNote').textContent='Правильный ответ: '+correct;
+        [...optsEl.children].find(c=>c.textContent===correct)?.classList.add('correct');
+      }
+      [...optsEl.children].forEach(c=>c.disabled=true);
+      document.getElementById('kanjiClozeScore').textContent='Верно: '+kScore;
+      setTimeout(()=>{ kCi++; renderKanjiCloze(); }, 900);
+    };
+    optsEl.appendChild(b);
+  });
+}
+
+// --- Grammar/practice data lookup (used inside the mixed level exam) ---
+function practiceData(level){ return level==='n5'?PRACTICE_N5 : level==='n4'?PRACTICE_N4 : PRACTICE_N3; }
+
+// Original explanations, written independently — not sourced from any textbook.
+const GRAMMAR_N5 = [
+  {point:"は", explain:"は (в этой роли читается «ва») отмечает тему предложения — то, о чём идёт речь. Ставится сразу после слова-темы.", example:"わたしは 学生 です。 — Что касается меня, я студент.", example2:"これは 本です。 — Это книга.",
+   quiz:[
+     {q:"わたし___ 学生 です。", a:"は", pool:["は","が","を","に"], note:"は вводит тему предложения."},
+     {q:"これ___ わたしの 本です。", a:"は", pool:["は","を","で","と"], note:"は — «что касается этого»."},
+     {q:"Как произносится частица-тема は?", a:"ва", pool:["ва","ха","хэ","е"], note:"В роли частицы は читается «ва»."}
+   ]},
+  {point:"です", explain:"Вежливая связка «быть, являться», ставится в конце фразы после существительного или な-прилагательного.", example:"これは 猫 です。 — Это кот.", example2:"わたしは 元気です。 — Я в порядке.",
+   quiz:[
+     {q:"これは 本___。", a:"です", pool:["です","ます","ました","でした"], note:"です — вежливая связка «быть»."},
+     {q:"です ставится...", a:"в конце фразы", pool:["в конце фразы","в начале фразы","перед глаголом","только с глаголами"], note:"..."},
+     {q:"わたしは 学生___。", a:"です", pool:["です","が","の","へ"], note:"..."}
+   ]},
+  {point:"じゃないです / ではありません", explain:"Отрицание です. じゃないです — разговорный вариант, ではありません — более вежливый/письменный. Оба переводятся как «не является».", example:"これは 本じゃないです。 — Это не книга.", example2:"彼は 学生ではありません。 — Он не студент.",
+   quiz:[
+     {q:"これは 猫___。（не кот, разговорный)", a:"じゃないです", pool:["です","じゃないです","でした","ですか"], note:"じゃないです — разговорное отрицание です."},
+     {q:"わたしは 先生___。（вежливый, не учитель)", a:"ではありません", pool:["です","ではありません","でした","でしょう"], note:"ではありません — более формальный вариант."},
+     {q:"じゃないです переводится как...", a:"не является", pool:["является","не является","был","будет"], note:"..."}
+   ]},
+  {point:"か", explain:"か добавляется в конец предложения, чтобы превратить его в вопрос. Порядок слов не меняется.", example:"これは 本です か。 — Это книга?", example2:"田中さんは 学生です か。 — Танака студент?",
+   quiz:[
+     {q:"これは ペンです___。（вопрос)", a:"か", pool:["か","ね","よ","も"], note:"か превращает утверждение в вопрос."},
+     {q:"Что делает частица か в конце фразы?", a:"превращает в вопрос", pool:["превращает в вопрос","отрицает","усиливает","ничего"], note:"..."},
+     {q:"あなたは 学生です___。", a:"か", pool:["か","を","に","で"], note:"..."}
+   ]},
+  {point:"の", explain:"Притяжательная частица, аналог «’s» — связывает два существительных, показывая принадлежность.", example:"わたしの 本 — моя книга.", example2:"日本語の 先生 — учитель японского языка.",
+   quiz:[
+     {q:"わたし___ 本です。（мой)", a:"の", pool:["の","は","を","と"], note:"の показывает принадлежность."},
+     {q:"日本語___ 先生 — учитель ЧЕГО?", a:"японского языка", pool:["японского языка","Японии как страны","японцев","японской еды"], note:"AのB = «B, принадлежащий/относящийся к A»."},
+     {q:"友だち___ 本 — чья книга?", a:"друга", pool:["друга","мамы","учителя","моя"], note:"..."}
+   ]},
+  {point:"も", explain:"も заменяет は или が в значении «тоже, также» — то же самое верно и для этого.", example:"わたしは 学生です。田中さんも 学生です。 — Я студент. Танака тоже студент.", example2:"これは 高いです。それも 高いです。 — Это дорогое. То тоже дорогое.",
+   quiz:[
+     {q:"わたしは 医者です。彼___ 医者です。", a:"も", pool:["も","は","が","を"], note:"も — «тоже»."},
+     {q:"も означает...", a:"тоже, также", pool:["тоже, также","только","совсем не","очень"], note:"..."},
+     {q:"これは 安いです。あれ___ 安いです。", a:"も", pool:["も","の","と","へ"], note:"も заменяет は/が."}
+   ]},
+  {point:"を", explain:"Частица прямого дополнения — показывает, что именно является объектом действия глагола.", example:"水を 飲む。 — Пить воду.", example2:"本を 読みます。 — Читаю книгу.",
+   quiz:[
+     {q:"パン___ 食べます。", a:"を", pool:["は","が","を","に"], note:"を — прямое дополнение."},
+     {q:"を ставится после...", a:"объекта действия", pool:["объекта действия","подлежащего","места","времени"], note:"..."},
+     {q:"本___ 読みます。", a:"を", pool:["を","で","へ","の"], note:"..."}
+   ]},
+  {point:"に", explain:"Показывает направление, время или конкретное место назначения.", example:"7時に 起きる。 — Вставать в 7 часов.", example2:"学校に 行きます。 — Иду в школу.",
+   quiz:[
+     {q:"9時___ 学校に 行きます。", a:"に", pool:["は","が","を","に"], note:"に указывает время действия."},
+     {q:"きのう 友だち___ 会いました。", a:"に", pool:["は","が","を","に"], note:"に — «с кем встретились»."},
+     {q:"に может обозначать...", a:"время или направление", pool:["время или направление","только время","только место","причину"], note:"..."}
+   ]},
+  {point:"へ", explain:"へ (в этой роли читается «э») указывает направление движения — «в сторону». Часто взаимозаменяема с に, но подчёркивает именно направление.", example:"学校へ 行きます。 — Иду в сторону школы.", example2:"日本へ 行きたいです。 — Хочу поехать в Японию.",
+   quiz:[
+     {q:"駅___ 行きます。（направление)", a:"へ", pool:["へ","を","で","と"], note:"へ показывает направление движения."},
+     {q:"Как читается частица へ?", a:"э", pool:["хэ","э","хе","е"], note:"В роли частицы へ читается «э»."},
+     {q:"日本___ 行きたいです。", a:"へ", pool:["へ","が","の","も"], note:"..."}
+   ]},
+  {point:"で", explain:"Место действия («где что-то происходит») или средство/способ выполнения действия.", example:"駅で 待つ。 — Ждать на станции.", example2:"バスで 行きます。 — Еду на автобусе.",
+   quiz:[
+     {q:"公園___ 遊びます。", a:"で", pool:["は","が","を","で"], note:"で — место действия."},
+     {q:"すし___ 食べたい です。", a:"が", pool:["は","が","を","で"], note:"с 〜たい объект часто отмечается が."},
+     {q:"バス___ 行きます。（средство)", a:"で", pool:["で","に","へ","と"], note:"で также показывает средство передвижения."}
+   ]},
+  {point:"と", explain:"Соединяет существительные («и») или показывает, с кем что-то делают («с кем-то»).", example:"犬と 猫が います。 — Есть собака и кошка.", example2:"友だちと 話します。 — Разговариваю с другом.",
+   quiz:[
+     {q:"パン___ 牛乳を 買います。（и)", a:"と", pool:["と","も","や","か"], note:"と соединяет два существительных."},
+     {q:"友だち___ 映画を 見ます。（с кем)", a:"と", pool:["と","に","で","を"], note:"と — «вместе с кем-то»."},
+     {q:"と между двумя словами означает...", a:"и", pool:["и","или","но","потому что"], note:"..."}
+   ]},
+  {point:"が", explain:"Частица подлежащего, часто вводит новую информацию или выделяет именно этот предмет.", example:"猫が いる。 — (Тут) есть кот.", example2:"だれが 来ますか。 — Кто придёт?",
+   quiz:[
+     {q:"猫___ かわいい です。", a:"が", pool:["は","が","を","に"], note:"が часто используется с описательными предложениями о новой информации."},
+     {q:"だれ___ 来ますか。", a:"が", pool:["が","は","を","の"], note:"вопросительное слово «кто» почти всегда с が."},
+     {q:"が обычно...", a:"вводит новую информацию", pool:["вводит новую информацию","отрицает","показывает направление","показывает время"], note:"..."}
+   ]},
+  {point:"から", explain:"Два значения: 1) «от, из» — начальная точка места/времени; 2) «потому что» — причина, в конце придаточного.", example:"9時から 働きます。 — Работаю с 9 часов.", example2:"忙しいから、行きません。 — Так как занят, не пойду.",
+   quiz:[
+     {q:"9時___ 学校です。（с — время)", a:"から", pool:["から","まで","に","で"], note:"から — начальная точка."},
+     {q:"雨だ___、行きません。（причина)", a:"から", pool:["から","ので","でも","のに"], note:"から в конце придаточного = «потому что»."},
+     {q:"「東京から」означает...", a:"из/от Токио", pool:["из/от Токио","до Токио","в Токио","через Токио"], note:"..."}
+   ]},
+  {point:"まで", explain:"Означает «до» — конечную точку во времени или пространстве. Часто в паре с から: «から〜まで» = «от... до...».", example:"9時から 5時まで 働きます。 — Работаю с 9 до 5.", example2:"駅まで 歩きます。 — Иду пешком до станции.",
+   quiz:[
+     {q:"駅___ 歩きます。（до)", a:"まで", pool:["まで","から","へ","を"], note:"まで — конечная точка."},
+     {q:"9時から 5時___ 働きます。", a:"まで", pool:["まで","から","に","で"], note:"から〜まで = «от... до...»."},
+     {q:"まで означает...", a:"до", pool:["до","от","через","за"], note:"..."}
+   ]},
+  {point:"あります", explain:"Используется, чтобы сказать «есть, имеется» о неодушевлённых предметах — вещах, зданиях, событиях.", example:"つくえの上に 本が あります。 — На столе есть книга.", example2:"今日、テストが あります。 — Сегодня есть тест.",
+   quiz:[
+     {q:"つくえの上に 本が ___。（есть, о вещи)", a:"あります", pool:["あります","います","でした","です"], note:"あります — для неодушевлённых предметов."},
+     {q:"Про что можно сказать あります?", a:"про стол", pool:["про стол","про кошку","про друга","про учителя"], note:"あります — только неживое."},
+     {q:"部屋に テレビが ___。", a:"あります", pool:["あります","います","します","きます"], note:"..."}
+   ]},
+  {point:"います", explain:"Используется для «есть, находится» про людей и животных — всё живое.", example:"教室に 学生が います。 — В классе есть студенты.", example2:"庭に 猫が います。 — В саду есть кошка.",
+   quiz:[
+     {q:"庭に 猫が ___。（есть, живое)", a:"います", pool:["います","あります","でした","です"], note:"います — для людей и животных."},
+     {q:"Что требует います, а не あります?", a:"собака", pool:["собака","книга","стол","машина"], note:"..."},
+     {q:"教室に 先生が ___。", a:"います", pool:["います","あります","します","なります"], note:"..."}
+   ]},
+  {point:"これ・それ・あれ", explain:"Указательные местоимения-существительные: これ (рядом со мной), それ (рядом с собеседником), あれ (далеко от обоих). Используются сами по себе, без существительного после.", example:"これは 本です。 — Это книга.", example2:"あれは 何ですか。 — Что вон то?",
+   quiz:[
+     {q:"Предмет рядом с говорящим — это...", a:"これ", pool:["これ","それ","あれ","この"], note:"これ — «это», рядом со мной."},
+     {q:"Предмет далеко от обоих — это...", a:"あれ", pool:["これ","それ","あれ","あの"], note:"あれ — «вон то»."},
+     {q:"___は 本です。（рядом с собеседником)", a:"それ", pool:["これ","それ","あれ","どれ"], note:"それ — «то», рядом со слушающим."}
+   ]},
+  {point:"この・その・あの", explain:"То же деление по близости, что これ/それ/あれ, но ставятся ТОЛЬКО перед существительным: «этот X», «тот X», «вон тот X».", example:"この本は おもしろいです。 — Эта книга интересная.", example2:"あの人は 先生です。 — Вон тот человек — учитель.",
+   quiz:[
+     {q:"___本は わたしのです。（этот, перед сущ.)", a:"この", pool:["これ","この","それ","その"], note:"この всегда стоит перед существительным."},
+     {q:"Можно ли сказать «これ本」?", a:"нет, неправильно", pool:["да, правильно","нет, неправильно"], note:"これ не ставится перед существительным — только この."},
+     {q:"___人は 先生です。（вон тот)", a:"あの", pool:["あれ","あの","その","この"], note:"あの — «вон тот» + существительное."}
+   ]},
+  {point:"ここ・そこ・あそこ", explain:"Указывают на место: «здесь» (рядом со мной), «там» (рядом с собеседником), «вон там» (далеко от обоих).", example:"ここは 学校です。 — Здесь школа.", example2:"トイレは あそこです。 — Туалет вон там.",
+   quiz:[
+     {q:"«Здесь» по-японски — это...", a:"ここ", pool:["ここ","そこ","あそこ","どこ"], note:"ここ — «здесь»."},
+     {q:"駅は ___です。（вон там)", a:"あそこ", pool:["ここ","そこ","あそこ","この"], note:"あそこ — далеко от обоих."},
+     {q:"どこ означает...", a:"где", pool:["где","здесь","там","вон там"], note:"どこ — вопросительное «где»."}
+   ]},
+  {point:"〜ます / 〜ません", explain:"Вежливая форма глагола: настоящее/будущее время, утверждение и отрицание.", example:"食べます / 食べません — ем / не ем.", example2:"行きます / 行きません — иду / не иду.",
+   quiz:[
+     {q:"毎日 パンを 食べ___。（утверждение)", a:"ます", pool:["ます","ません","ました","ませんでした"], note:"〜ます — вежливое утверждение."},
+     {q:"わたしは 肉を 食べ___。（не ем)", a:"ません", pool:["ます","ません","ました","たい"], note:"〜ません — вежливое отрицание."},
+     {q:"〜ます относится к какому времени?", a:"настоящее/будущее", pool:["настоящее/будущее","только прошедшее","только будущее","никакому"], note:"..."}
+   ]},
+  {point:"〜たい", explain:"«Хочу сделать» — присоединяется к основе глагола (форма на ます, без ます).", example:"日本に 行きたい。 — Хочу поехать в Японию.", example2:"すしを 食べたいです。 — Хочу съесть суши.",
+   quiz:[
+     {q:"すし___ 食べたい です。", a:"が", pool:["は","が","を","に"], note:"с 〜たい объект часто отмечается が."},
+     {q:"日本に 行き___です。（хочу)", a:"たい", pool:["たい","ます","たら","そう"], note:"〜たい — «хочу сделать»."},
+     {q:"〜たい присоединяется к...", a:"основе глагола (форма на ます)", pool:["основе глагола (форма на ます)","словарной форме","て-форме","прошедшему времени"], note:"..."}
+   ]},
+  {point:"い-прилагательные", explain:"い-прилагательные заканчиваются на い в словарной форме и могут стоять перед существительным или в конце предложения. Отрицание: замена い на くない.", example:"この本は 面白いです。 — Эта книга интересная.", example2:"高い山です。 — Высокая гора.",
+   quiz:[
+     {q:"この 部屋は ___です。（маленькая)", a:"小さい", pool:["小さい","小さく","小さかった","小さくない"], note:"小さい — словарная форма い-прилагательного."},
+     {q:"い-прилагательные в словарной форме заканчиваются на...", a:"い", pool:["い","な","だ","の"], note:"..."},
+     {q:"高い山です。 переводится как...", a:"Высокая гора.", pool:["Высокая гора.","Гора высока","Гора не высокая.","Была высокая гора."], note:"..."}
+   ]},
+  {point:"な-прилагательные", explain:"な-прилагательные перед существительным требуют な (静かな部屋), а перед です — само прилагательное без な (部屋は静かです).", example:"静かな 部屋です。 — Тихая комната.", example2:"この 町は きれいです。 — Этот город красивый.",
+   quiz:[
+     {q:"___な 部屋です。（тихий, перед сущ.)", a:"静か", pool:["静か","静かい","静かだ","静かの"], note:"な-прилагательное перед сущ. требует な после основы."},
+     {q:"この 町は きれい___。（перед です, без な)", a:"です", pool:["です","なです","いです","くです"], note:"перед です な-прилагательное не добавляет な."},
+     {q:"Какое прилагательное требует な перед существительным?", a:"な-прилагательное", pool:["な-прилагательное","い-прилагательное","оба типа","ни одно"], note:"..."}
+   ]},
+  {point:"Прошедшее время です → でした", explain:"Прошедшее время です — でした. Отрицательное прошедшее — じゃなかったです / ではありませんでした.", example:"きのうは 休みでした。 — Вчера был выходной.", example2:"学生でした。 — Был студентом.",
+   quiz:[
+     {q:"きのうは 休み___。（был, прошедшее)", a:"でした", pool:["です","でした","でしょう","ですか"], note:"でした — прошедшее время です."},
+     {q:"です в прошедшем времени становится...", a:"でした", pool:["でした","でしょう","じゃないです","ました"], note:"..."},
+     {q:"先生___。（был учителем)", a:"でした", pool:["でした","です","でしょう","でない"], note:"..."}
+   ]},
+  {point:"Отрицательная форма глаголов (простая)", explain:"Кроме вежливого 〜ません, у глаголов есть простая (словарная) отрицательная форма на 〜ない — используется в неформальной речи.", example:"行かない。 — Не пойду (неформально).", example2:"食べない。 — Не ем/не буду есть.",
+   quiz:[
+     {q:"行く → отрицательная форма (неформально)", a:"行かない", pool:["行かない","行きません","行った","行きたい"], note:"словарная форма → ない-форма."},
+     {q:"〜ない форма используется...", a:"в неформальной речи", pool:["в неформальной речи","только в письмах","только в вопросах","только в прошедшем"], note:"..."},
+     {q:"食べる → отрицательная форма", a:"食べない", pool:["食べない","食べません","食べた","食べたい"], note:"..."}
+   ]},
+  {point:"Прошедшее время глаголов", explain:"Прошедшее вежливое время глагола образуется заменой ます на ました.", example:"きのう 映画を 見ました。 — Вчера смотрел фильм.", example2:"朝ご飯を 食べました。 — Позавтракал.",
+   quiz:[
+     {q:"きのう 映画を 見___。（прошедшее)", a:"ました", pool:["ました","ます","ません","ませんでした"], note:"ました — прошедшее вежливое."},
+     {q:"ます в прошедшем времени становится...", a:"ました", pool:["ました","でした","ません","たい"], note:"..."},
+     {q:"朝ご飯を 食べ___。（позавтракал)", a:"ました", pool:["ました","ます","ましょう","ません"], note:"..."}
+   ]},
+  {point:"Прошедшее отрицание", explain:"Прошедшее отрицательное вежливое время — 〜ませんでした (не делал).", example:"きのう 勉強しませんでした。 — Вчера не занимался.", example2:"朝ご飯を 食べませんでした。 — Не позавтракал.",
+   quiz:[
+     {q:"きのう 勉強___。（не занимался)", a:"しませんでした", pool:["しました","しませんでした","します","しません"], note:"〜ませんでした — прошедшее отрицание."},
+     {q:"Прошедшее отрицание образуется от ません добавлением...", a:"でした", pool:["でした","ます","たい","でしょう"], note:"..."},
+     {q:"朝ご飯を 食べ___。（не позавтракал)", a:"ませんでした", pool:["ませんでした","ました","ません","ますでした"], note:"..."}
+   ]},
+  {point:"て-форма", explain:"て-форма — базовая форма глагола для соединения действий, просьб и многих грамматических конструкций (てください, ている и т.д.).", example:"朝 起きて、朝ご飯を 食べます。 — Встаю утром и завтракаю.", example2:"本を 読んで、寝ます。 — Читаю книгу и сплю.",
+   quiz:[
+     {q:"食べる → て-форма", a:"食べて", pool:["食べて","食べます","食べた","食べない"], note:"глагол на -еру/-иру: убрать る, добавить て."},
+     {q:"て-форма используется, чтобы...", a:"соединять действия", pool:["соединять действия","отрицать","образовать прошедшее время","задать вопрос"], note:"..."},
+     {q:"行く → て-форма (исключение)", a:"行って", pool:["行って","行きて","行いて","行んで"], note:"行く — исключение, て-форма 行って."}
+   ]},
+  {point:"〜てください", explain:"て-форма + ください = вежливая просьба «пожалуйста, сделайте».", example:"ちょっと 待ってください。 — Подождите немного, пожалуйста.", example2:"ここに 名前を 書いてください。 — Напишите здесь имя, пожалуйста.",
+   quiz:[
+     {q:"ちょっと 待っ___。（пожалуйста, подождите)", a:"てください", pool:["てください","ています","てもいい","てはいけない"], note:"てください — вежливая просьба."},
+     {q:"てください переводится как...", a:"пожалуйста, сделайте", pool:["пожалуйста, сделайте","нельзя делать","можно делать","хочу сделать"], note:"..."},
+     {q:"ここに 名前を 書い___。", a:"てください", pool:["てください","ている","てもいい","てはいけません"], note:"..."}
+   ]},
+  {point:"〜てもいいです", explain:"て-форма + もいいです = разрешение «можно делать».", example:"ここに 座ってもいいですか。 — Можно здесь сесть?", example2:"写真を 撮ってもいいです。 — Можно фотографировать.",
+   quiz:[
+     {q:"ここに 座っ___か。（можно?)", a:"てもいいです", pool:["てもいいです","てはいけません","てください","ている"], note:"てもいいです — разрешение."},
+     {q:"てもいいです означает...", a:"можно делать", pool:["можно делать","нельзя делать","нужно делать","хочу делать"], note:"..."},
+     {q:"写真を 撮っ___。（можно фотографировать)", a:"てもいいです", pool:["てもいいです","てはいけません","てください","ていない"], note:"..."}
+   ]},
+  {point:"〜てはいけません", explain:"て-форма + はいけません = запрет «нельзя делать».", example:"ここで 写真を 撮ってはいけません。 — Здесь нельзя фотографировать.", example2:"ここに 入ってはいけません。 — Сюда нельзя входить.",
+   quiz:[
+     {q:"ここで 写真を 撮っ___。（нельзя)", a:"てはいけません", pool:["てはいけません","てもいいです","てください","ている"], note:"てはいけません — запрет."},
+     {q:"てはいけません означает...", a:"нельзя делать", pool:["нельзя делать","можно делать","нужно делать","хочу делать"], note:"..."},
+     {q:"ここに 入っ___。（нельзя входить)", a:"てはいけません", pool:["てはいけません","てもいいです","てください","ていた"], note:"..."}
+   ]},
+  {point:"〜ましょう", explain:"ましょう — «давайте сделаем вместе», приглашение к совместному действию.", example:"いっしょに 行きましょう。 — Давайте пойдём вместе.", example2:"少し 休みましょう。 — Давайте немного отдохнём.",
+   quiz:[
+     {q:"いっしょに 行き___。（давайте)", a:"ましょう", pool:["ましょう","ます","ません","たい"], note:"ましょう — приглашение к действию."},
+     {q:"ましょう переводится как...", a:"давайте сделаем", pool:["давайте сделаем","не будем делать","сделал","хочу сделать"], note:"..."},
+     {q:"少し 休み___。（давайте отдохнём)", a:"ましょう", pool:["ましょう","ました","ません","たかった"], note:"..."}
+   ]},
+  {point:"〜ませんか", explain:"ませんか — вежливое приглашение «не хотите ли...?», мягче чем ましょう.", example:"いっしょに 行きませんか。 — Не хотите пойти вместе?", example2:"お茶を 飲みませんか。 — Не хотите выпить чаю?",
+   quiz:[
+     {q:"いっしょに 行き___か。（не хотите ли?)", a:"ません", pool:["ません","ました","ましょう","たい"], note:"〜ませんか — вежливое приглашение-вопрос."},
+     {q:"ませんか мягче, чем...", a:"ましょう", pool:["ましょう","ます","たい","てください"], note:"..."},
+     {q:"お茶を 飲み___か。", a:"ません", pool:["ません","ました","ましょう","たかった"], note:"..."}
+   ]},
+  {point:"〜ことができます", explain:"Глагол в словарной форме + ことができます = «умею/могу делать».", example:"わたしは 日本語を 話すことができます。 — Я умею говорить по-японски.", example2:"漢字を 書くことができます。 — Умею писать кандзи.",
+   quiz:[
+     {q:"わたしは 日本語を 話す___。（умею)", a:"ことができます", pool:["ことができます","たいです","てください","そうです"], note:"ことができます — «умею/могу»."},
+     {q:"ことができます присоединяется к...", a:"словарной форме глагола", pool:["словарной форме глагола","て-форме","ます-форме","прошедшему времени"], note:"..."},
+     {q:"漢字を 書く___。（могу писать)", a:"ことができます", pool:["ことができます","てください","たいです","ましょう"], note:"..."}
+   ]},
+  {point:"〜ことが好きです", explain:"Глагол в словарной форме + ことが好きです = «нравится делать».", example:"本を 読むことが 好きです。 — Мне нравится читать книги.", example2:"音楽を 聞くことが 好きです。 — Мне нравится слушать музыку.",
+   quiz:[
+     {q:"本を 読む___好きです。（нравится)", a:"ことが", pool:["ことが","ことを","ものが","のが"], note:"ことが好きです — «нравится делать»."},
+     {q:"ことが好きです используется с...", a:"глаголом в словарной форме", pool:["глаголом в словарной форме","существительным только","прилагательным","прошедшим временем"], note:"..."},
+     {q:"音楽を 聞く___好きです。", a:"ことが", pool:["ことが","のを","ものは","ことを"], note:"..."}
+   ]},
+  {point:"〜から〜まで", explain:"Комбинация から (от) и まで (до) — «от... до...», для времени или места.", example:"9時から 5時まで 働きます。 — Работаю с 9 до 5.", example2:"東京から 大阪まで 電車で 行きます。 — Еду на поезде от Токио до Осаки.",
+   quiz:[
+     {q:"9時___ 5時まで 働きます。", a:"から", pool:["から","まで","に","で"], note:"から〜まで = «от... до...»."},
+     {q:"東京から 大阪___ 電車で 行きます。", a:"まで", pool:["まで","から","に","へ"], note:"..."},
+     {q:"から〜まで используется для...", a:"диапазона времени или места", pool:["диапазона времени или места","только времени","только денег","причины"], note:"..."}
+   ]},
+  {point:"〜があります / 〜がいます", explain:"Обобщение конструкции «есть/имеется»: неодушевлённое — があります, одушевлённое — がいます. Место часто указывается через に.", example:"机の上に 本があります。 — На столе есть книга.", example2:"公園に 犬がいます。 — В парке есть собака.",
+   quiz:[
+     {q:"机の上に 本___あります。", a:"が", pool:["が","は","を","に"], note:"があります — «есть» (неодуш.)."},
+     {q:"公園に 犬___います。", a:"が", pool:["が","は","を","で"], note:"がいます — «есть» (одуш.)."},
+     {q:"Какая форма используется для животных: あります или います?", a:"います", pool:["います","あります","です","でした"], note:"..."}
+   ]},
+  {point:"〜のが好きです", explain:"Ещё один способ сказать «нравится делать» — глагол в словарной форме + のが好きです, близко по смыслу к ことが好きです.", example:"映画を 見るのが 好きです。 — Мне нравится смотреть фильмы.", example2:"歌うのが 好きです。 — Мне нравится петь.",
+   quiz:[
+     {q:"映画を 見る___好きです。", a:"のが", pool:["のが","ことを","ものが","のを"], note:"のが好きです — «нравится делать»."},
+     {q:"のが好きです по смыслу близко к...", a:"ことが好きです", pool:["ことが好きです","てください","たいです","ましょう"], note:"..."},
+     {q:"歌う___好きです。（петь)", a:"のが", pool:["のが","ことを","のを","ものが"], note:"..."}
+   ]},
+  {point:"Наречия частотности", explain:"Показывают, как часто что-то происходит: いつも (всегда), よく (часто), ときどき (иногда), あまり〜ない (не очень), ぜんぜん〜ない (совсем не).", example:"わたしは いつも 朝ご飯を 食べます。 — Я всегда завтракаю.", example2:"あまり 肉を 食べません。 — Не очень часто ем мясо.",
+   quiz:[
+     {q:"わたしは ___ 朝ご飯を 食べます。（всегда)", a:"いつも", pool:["いつも","ぜんぜん","あまり","ときどき"], note:"いつも — «всегда»."},
+     {q:"あまり всегда используется с...", a:"отрицанием", pool:["отрицанием","утверждением","вопросом","прошедшим временем"], note:"あまり〜ない = «не очень»."},
+     {q:"ときどき означает...", a:"иногда", pool:["иногда","всегда","никогда","часто"], note:"..."}
+   ]},
+  {point:"Счётные суффиксы", explain:"При счёте предметов к числу добавляется счётный суффикс по типу предмета: 〜つ (общие предметы), 〜人 (люди), 〜枚 (плоские предметы), 〜本 (длинные предметы), 〜匹 (мелкие животные).", example:"りんごを 三つ 買いました。 — Купил три яблока.", example2:"学生が 五人 います。 — Есть пять студентов.",
+   quiz:[
+     {q:"りんごを 三___ 買いました。（общий счётчик)", a:"つ", pool:["つ","人","枚","本"], note:"つ — универсальный счётчик для предметов."},
+     {q:"Людей считают с помощью...", a:"人", pool:["人","つ","枚","匹"], note:"..."},
+     {q:"紙を 二___ ください。（лист бумаги)", a:"枚", pool:["枚","本","つ","匹"], note:"枚 — счётчик плоских предметов."}
+   ]},
+  {point:"Сравнение", explain:"Сравнение двух вещей: AはBより〜です (A более... чем B). Превосходная степень: AはXの中で一番〜です (A самый... из X).", example:"これは それより 高いです。 — Это дороже, чем то.", example2:"富士山は 日本で 一番 高いです。 — Фудзи — самая высокая гора в Японии.",
+   quiz:[
+     {q:"これは それ___ 高いです。（чем)", a:"より", pool:["より","から","まで","ほど"], note:"より — «чем» в сравнении."},
+     {q:"一番 означает...", a:"самый", pool:["самый","более","менее","одинаково"], note:"..."},
+     {q:"富士山は 日本___ 一番 高いです。", a:"で", pool:["で","に","の","へ"], note:"«в Х самый...» — X + で."}
+   ]}
+];
+GRAMMAR_TARGET.n5=GRAMMAR_N5.length;
+const PRACTICE_N5 = [
+  {q:"わたし ___ 学生 です。", a:"は", note:"は отмечает тему предложения — «что касается меня»."},
+  {q:"パン ___ 食べます。", a:"を", note:"を показывает, что именно едят — прямое дополнение."},
+  {q:"9時 ___ 学校に 行きます。", a:"に", note:"に указывает время действия."},
+  {q:"公園 ___ 遊びます。", a:"で", note:"で — место, где происходит действие."},
+  {q:"猫 ___ かわいい です。", a:"は", note:"は вводит тему («кот» — то, о чём говорим)."},
+  {q:"きのう 友だち ___ 会いました。", a:"に", note:"に здесь показывает, с кем произошла встреча."},
+  {q:"これ ___ わたしの 本です。", a:"は", note:"は вводит тему «это»."},
+  {q:"すし ___ 食べたい です。", a:"が", note:"с формой «хочу» (〜たい) объект часто отмечается が."}
+];
+function getSet(name){
+  if(name==='hira') return toKanaObjs(HIRA_RAW);
+  if(name==='kata') return toKanaObjs(KATA_RAW);
+  if(name==='kanji') return toKanjiObjs(KANJI_RAW);
+  return [...toKanaObjs(HIRA_RAW), ...toKanaObjs(KATA_RAW)];
+}
+function shuffle(arr){ for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
+
+// Screen navigation
+var SCREENS=['menuScreen','studyScreen','kanaScreen','levelsScreen','courseScreen','progressScreen','reviewScreen'];
+function showScreen(id){
+  SCREENS.forEach(s=>{
+    const el=document.getElementById(s);
+    const show = s===id;
+    el.classList.toggle('hidden', !show);
+    if(show){ el.classList.remove('fade-in'); void el.offsetWidth; el.classList.add('fade-in'); }
+  });
+  onScreen(id);
+}
+document.getElementById('goKana').onclick = ()=>{ showScreen('kanaScreen'); renderGrid(); };
+document.getElementById('goCourse').onclick = ()=>{ showScreen('levelsScreen'); };
+document.querySelectorAll('[data-lvopen]').forEach(b=>b.onclick=()=>{
+  currentLevel=b.dataset.lvopen; currentCTab='kanji';
+  document.querySelectorAll('#courseTabs button').forEach(t=>t.classList.toggle('active', t.dataset.ctab==='kanji'));
+  showScreen('courseScreen'); renderCourse();
+});
+document.querySelectorAll('[data-lvlock]').forEach(b=>b.onclick=()=>toast('Уровень '+b.dataset.lvlock.toUpperCase()+' пока закрыт'));
+function continueLearning(){
+  currentLevel = bestNextLevel();
+  currentCTab = 'exam';
+  showScreen('courseScreen');
+  document.querySelectorAll('#levelRow .chip').forEach(c=>c.classList.toggle('active', c.dataset.level===currentLevel));
+  document.querySelectorAll('#courseTabs button').forEach(b=>b.classList.toggle('active', b.dataset.ctab==='exam'));
+  renderCourse();
+}
+document.querySelectorAll('[data-back]').forEach(b=> b.onclick = ()=> showScreen(b.dataset.back+'Screen'));
+
+// Grid renderer (selectable tiles, no forced order)
+function buildTiles(container, items){
+  container.innerHTML='';
+  items.forEach(item=>{
+    const tile=document.createElement('button');
+    tile.className='tile'; tile.type='button';
+    tile.innerHTML='<span class="t-main">'+item.char+'</span><span class="t-alt hidden">'+item.alt+'</span>'+(item.alt.indexOf('meaning')<0?'<span class="snd mini" role="button" data-say="'+item.char+'" aria-label="Озвучить">🔊</span>':'');
+    tile.onclick=()=>{
+      tile.querySelector('.t-main').classList.toggle('hidden');
+      tile.querySelector('.t-alt').classList.toggle('hidden');
+    };
+    container.appendChild(tile);
+  });
+}
+let currentSet='hira';
+function renderGrid(){ buildTiles(document.getElementById('grid'), getSet(currentSet)); }
+
+
+// Set switching
+document.getElementById('setRow').addEventListener('click', e=>{
+  const btn=e.target.closest('.chip'); if(!btn) return;
+  document.querySelectorAll('#setRow .chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  currentSet=btn.dataset.set;
+  renderGrid();
+  startQuiz();
+});
+
+// Cards/Quiz tab switching
+document.getElementById('tabs').addEventListener('click', e=>{
+  const btn=e.target.closest('button'); if(!btn) return;
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const mode=btn.dataset.mode;
+  document.getElementById('cardsMode').classList.toggle('hidden', mode!=='cards');
+  document.getElementById('quizMode').classList.toggle('hidden', mode!=='quiz');
+  if(mode==='quiz') startQuiz();
+});
+
+// Quiz
+const QUIZ_LEN=20;
+let quizPool=[], qi=0, score=0, locked=false;
+function bestKey(){ return 'jp-quiz-best-'+currentSet; }
+function loadBest(){
+  try{ const v=localStorage.getItem(bestKey()); document.getElementById('quizBest').textContent='Рекорд: '+(v??'—'); }
+  catch(e){ document.getElementById('quizBest').textContent='Рекорд: —'; }
+}
+function saveBestIfNeeded(){
+  try{ const prev=parseInt(localStorage.getItem(bestKey())||'0',10); if(score>prev) localStorage.setItem(bestKey(),String(score)); loadBest(); }
+  catch(e){}
+}
+function startQuiz(){
+  const full=getSet(currentSet);
+  quizPool=shuffle([...full]).slice(0, Math.min(QUIZ_LEN, full.length));
+  qi=0; score=0; locked=false; loadBest(); renderQuiz();
+}
+function renderQuiz(){
+  if(qi>=quizPool.length){
+    document.getElementById('quizKana').textContent='🎉';
+    document.getElementById('quizOpts').innerHTML='';
+    document.getElementById('quizFeedback').textContent='Готово! Верно '+score+' из '+quizPool.length+'.';
+    document.getElementById('quizProgress').textContent='Тест завершён';
+    saveBestIfNeeded();
+    const again=document.createElement('button');
+    again.className='chip active'; again.style.marginTop='10px'; again.textContent='Пройти ещё раз';
+    again.onclick=startQuiz;
+    document.getElementById('quizOpts').appendChild(again);
+    return;
+  }
+  locked=false;
+  const item=quizPool[qi];
+  document.getElementById('quizKana').textContent=item.char;
+  document.getElementById('quizProgress').textContent='Вопрос '+(qi+1)+' / '+quizPool.length;
+  document.getElementById('quizScore').textContent='Верно: '+score;
+  document.getElementById('quizFeedback').textContent='';
+  const full=getSet(currentSet);
+  let wrongs=shuffle(full.filter(p=>p.quiz!==item.quiz)).slice(0,3).map(p=>p.quiz);
+  let options=shuffle([item.quiz, ...wrongs]);
+  const optsEl=document.getElementById('quizOpts');
+  optsEl.innerHTML='';
+  options.forEach(opt=>{
+    const b=document.createElement('button'); b.className='opt'; b.textContent=opt;
+    b.onclick=()=>{
+      if(locked) return; locked=true;
+      const correct=opt===item.quiz;
+      if(correct){ b.classList.add('correct'); score++; addXP(3); document.getElementById('quizFeedback').textContent='Верно!'; }
+      else{
+        b.classList.add('wrong');
+        document.getElementById('quizFeedback').textContent='Неверно — правильный ответ: '+item.quiz;
+        [...optsEl.children].find(c=>c.textContent===item.quiz)?.classList.add('correct');
+      }
+      [...optsEl.children].forEach(c=>c.disabled=true);
+      document.getElementById('quizScore').textContent='Верно: '+score;
+      setTimeout(()=>{ qi++; renderQuiz(); }, 900);
+    };
+    optsEl.appendChild(b);
+  });
+}
+
+/* ===== v2: theme, XP/streak, spaced repetition, audio, dashboard, review ===== */
+const DAY=864e5, SRS_DAYS=[10/1440,1,2,4,8,16];
+const $=id=>document.getElementById(id);
+function today(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function toast(t){let e=$('toast');if(!e){e=document.createElement('div');e.id='toast';e.className='toast';document.body.appendChild(e);}e.textContent=t;e.style.opacity=1;clearTimeout(e._t);e._t=setTimeout(()=>{e.style.opacity=0;},1900);}
+function buzz(p){try{navigator.vibrate&&navigator.vibrate(p);}catch(e){}}
+function plural(n,f){const m=n%10,h=n%100;return (m===1&&h!==11)?f[0]:(m>=2&&m<=4&&(h<10||h>=20))?f[1]:f[2];}
+
+// Theme (manual toggle, saved)
+function effTheme(){return document.documentElement.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');}
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);$('themeBtn').textContent=t==='dark'?'☀️':'🌙';}
+$('themeBtn').onclick=()=>{const t=effTheme()==='dark'?'light':'dark';saveJSON('jp-theme',t);applyTheme(t);};
+
+// XP + streak + daily activity
+function getStats(){return loadJSON('jp-stats',{xp:0,streak:0,last:'',days:{}});}
+function addXP(n){
+  const s=getStats(),t=today();
+  if(s.last!==t){s.streak=(s.last===today(new Date(Date.now()-DAY)))?s.streak+1:1;s.last=t;}
+  s.xp+=n;s.days[t]=(s.days[t]||0)+1;
+  const keep={};Object.keys(s.days).sort().slice(-30).forEach(k=>keep[k]=s.days[k]);s.days=keep;
+  saveJSON('jp-stats',s);
+}
+function curStreak(){const s=getStats();return (s.last===today()||s.last===today(new Date(Date.now()-DAY)))?s.streak:0;}
+
+// Learnable items = words + kanji of all levels
+function allItems(){
+  if(allItems.c)return allItems.c;
+  const out=[];
+  [['n5',WORDS_N5,KANJI_RAW],['n4',WORDS_N4,KANJI_N4_RAW],['n3',WORDS_N3,KANJI_N3_RAW]].forEach(([lv,ws,ks])=>{
+    ws.forEach(([w,r,tr,ex,extr])=>out.push({key:'w:'+w,jp:w,rd:r,tr,ex,extr,lv,type:'w'}));
+    ks.forEach(([c,r,m])=>out.push({key:'j:'+c,jp:c,rd:r,tr:m,lv,type:'j'}));
+  });
+  return allItems.c=out;
+}
+
+// Spaced repetition: {c:correct, e:errors, lv:0-5, next:ts, last:ts}
+function getSRS(){return loadJSON('jp-srs',{});}
+function srsRate(key,g){ // g: 0 не знаю, 1 сложно, 2 знаю
+  const S=getSRS(),now=Date.now(),e=S[key]||{c:0,e:0,lv:0,next:0,last:0};
+  if(g===0){e.e++;e.lv=0;e.next=now+SRS_DAYS[0]*DAY;}
+  else if(g===1){e.lv=Math.max(1,e.lv);e.next=now+(e.lv<=1?1:SRS_DAYS[e.lv]/2)*DAY;}
+  else{e.c++;e.lv=Math.min(5,e.lv+1);e.next=now+SRS_DAYS[e.lv]*DAY;}
+  e.last=now;S[key]=e;saveJSON('jp-srs',S);return e;
+}
+function srsStatus(e){
+  if(!e)return 'Новое'; if(e.lv>=5)return 'Выучено'; if(e.e>=2&&e.lv<=2)return 'Сложное';
+  if(e.next<=Date.now())return 'Повторить сегодня'; return 'Изучаю';
+}
+function dueItems(){const S=getSRS(),n=Date.now();
+  return allItems().filter(i=>S[i.key]&&S[i.key].next<=n).sort((a,b)=>(S[b.key].e-S[a.key].e)||(S[a.key].lv-S[b.key].lv));}
+function newItems(k){const S=getSRS(),lv=bestNextLevel();return allItems().filter(i=>!S[i.key]&&i.lv===lv).slice(0,k);}
+function mistakeItems(){const S=getSRS(),M=getMistakes(),w=i=>(S[i.key]?S[i.key].e:0)+(M[i.key]||0);
+  return allItems().filter(i=>w(i)>0).sort((a,b)=>w(b)-w(a));}
+function onAnswer(key,ok){addXP(ok?10:2);buzz(ok?12:[30,40,30]);if(key.indexOf('w:')===0)srsRate(key,ok?2:0);}
+function levelPct(lv){const S=getSRS(),its=allItems().filter(i=>i.lv===lv);return its.length?Math.round(100*its.filter(i=>S[i.key]&&S[i.key].lv>=2).length/its.length):0;}
+function totalPct(){const S=getSRS(),its=allItems();return its.length?Math.round(100*its.filter(i=>S[i.key]&&S[i.key].lv>=2).length/its.length):0;}
+
+// Audio (Web Speech API, ja-JP)
+function speak(t,btn){
+  if(!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined'){toast('Озвучка не поддерживается в этом браузере');return;}
+  const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';u.rate=.85;
+  const vs=speechSynthesis.getVoices(),v=vs.find(x=>/^ja/i.test(x.lang));
+  if(v)u.voice=v;else if(vs.length)toast('Японский голос не найден — установи его в настройках системы');
+  document.querySelectorAll('.snd.playing').forEach(x=>x.classList.remove('playing'));
+  if(btn)btn.classList.add('playing');
+  u.onend=u.onerror=()=>{if(btn)btn.classList.remove('playing');};
+  speechSynthesis.cancel();speechSynthesis.speak(u);
+}
+document.addEventListener('click',e=>{const s=e.target.closest('[data-say]');if(s){e.stopPropagation();speak(s.dataset.say,s);}},true);
+
+// Dashboard
+function renderDash(){
+  const lv=bestNextLevel(),st=getStats(),due=dueItems().length,pct=levelPct(lv),has=Object.keys(getSRS()).length;
+  const line=due?('Сегодня: '+due+' '+plural(due,['задание','задания','заданий'])+' на повторение'):(has?'На сегодня всё повторено 🎉':'Начни с 8 новых карточек');
+  $('dash').innerHTML='<h2>「日本語のたび」</h2><p class="tile-hint" style="text-align:left;margin:4px 0 0">Твоё путешествие продолжается</p>'+
+    '<div class="lvl"><b>'+lv.toUpperCase()+'</b><span>'+pct+'% прогресса</span></div><div class="bar"><i style="width:'+pct+'%"></i></div>'+
+    '<div class="pills"><span class="pill">🔥 '+curStreak()+' '+plural(curStreak(),['день','дня','дней'])+' подряд</span><span class="pill">⭐ '+st.xp+' XP</span></div>'+
+    '<p style="margin:0 0 12px;font-size:15px">'+line+'</p>'+
+    '<div class="btnrow"><button class="big primary" id="dContinue">Продолжить</button><button class="big" id="dStudy">Начать обучение</button><button class="big" id="dMist">Повторить ошибки</button></div>';
+  $('dContinue').onclick=continueLearning;$('dStudy').onclick=()=>showScreen('studyScreen');$('dMist').onclick=()=>{rvMode='mistakes';showScreen('reviewScreen');};
+}
+
+// Review screen
+let rvQ=[],rvI=0,rvMode='due',rvShown=false;
+function startReview(){
+  if(rvMode==='mistakes')rvQ=mistakeItems().slice(0,20);
+  else{const d=dueItems();rvQ=d.slice(0,20).concat(d.length<8?newItems(8-d.length):[]);}
+  rvI=0;rvShown=false;renderReview();
+}
+function renderReview(){
+  const b=$('reviewBody'),S=getSRS();
+  const modes='<div class="setrow"><button class="chip'+(rvMode==='due'?' active':'')+'" data-rm="due">Сегодня</button><button class="chip'+(rvMode==='mistakes'?' active':'')+'" data-rm="mistakes">Ошибки</button></div>';
+  if(rvI>=rvQ.length){
+    b.innerHTML=modes+'<div class="rcard" style="cursor:default"><div class="rjp">'+(rvQ.length?'🎉':'✨')+'</div><div class="rtr">'+(rvQ.length?'Сессия завершена':(rvMode==='due'?'Пока нечего повторять':'Ошибок пока нет'))+'</div></div>'+(rvQ.length?'<div class="btnrow" style="margin-top:12px"><button class="big primary" id="rvAgain">Ещё раз</button></div>':'');
+  }else{
+    const it=rvQ[rvI];
+    b.innerHTML=modes+'<div class="scorebar"><span>Карточка '+(rvI+1)+' / '+rvQ.length+'</span><span class="mistake-tag">'+srsStatus(S[it.key])+'</span></div>'+
+      '<div class="rcard fade-in" id="rvCard"><div class="rjp">'+it.jp+'</div><span class="snd" role="button" data-say="'+it.jp+'" aria-label="Озвучить">🔊</span>'+
+      '<div id="rvAns" class="'+(rvShown?'':'hidden')+'"><div class="rrd">'+it.rd+'</div><div class="rtr">'+it.tr+'</div>'+(it.ex?'<div class="tile-hint" style="margin:8px 0 0">'+it.ex+'<br>'+it.extr+'</div>':'')+'</div>'+
+      '<div class="tile-hint'+(rvShown?' hidden':'')+'" id="rvHint" style="margin:0">Нажми на карточку, чтобы увидеть ответ</div></div>'+
+      '<div class="grades"><button class="big" data-g="0">Не знаю</button><button class="big" data-g="1">Сложно</button><button class="big" data-g="2">Знаю</button></div>';
+  }
+  b.querySelectorAll('[data-rm]').forEach(x=>x.onclick=()=>{rvMode=x.dataset.rm;startReview();});
+  const c=$('rvCard');if(c)c.onclick=()=>{$('rvAns').classList.remove('hidden');$('rvHint').classList.add('hidden');rvShown=true;};
+  b.querySelectorAll('[data-g]').forEach(x=>x.onclick=()=>gradeCard(+x.dataset.g));
+  const a=$('rvAgain');if(a)a.onclick=startReview;
+}
+function gradeCard(g){
+  const c=$('rvCard');if(!c||c.dataset.done)return;c.dataset.done=1;
+  const it=rvQ[rvI],e=srsRate(it.key,g);addXP(g===2?8:g===1?4:1);buzz(g===2?12:g===0?[30,40,30]:8);
+  const d=e.next-Date.now();toast('Следующее повторение: '+(d<DAY?'через '+Math.max(1,Math.round(d/60000))+' мин.':'через '+Math.round(d/DAY)+' дн.'));
+  c.classList.remove('fade-in');c.classList.add(g===0?'no-anim':'ok-anim');
+  if(g===0&&rvQ.filter(x=>x===it).length<2)rvQ.push(it);
+  setTimeout(()=>{rvI++;rvShown=false;renderReview();},650);
+}
+
+// Progress dashboard (top block; per-level cards remain below)
+function row(a,b){return '<div class="stat-row"><span>'+a+'</span><span>'+b+'</span></div>';}
+function progressTop(){
+  const st=getStats(),S=getSRS(),its=allItems(),cnt={'Новое':0,'Изучаю':0,'Сложное':0,'Повторить сегодня':0,'Выучено':0};
+  its.forEach(i=>cnt[srsStatus(S[i.key])]++);
+  const lw=its.filter(i=>i.type==='w'&&S[i.key]&&S[i.key].lv>=2).length,lk=its.filter(i=>i.type==='j'&&S[i.key]&&S[i.key].lv>=2).length;
+  const days=[];for(let k=6;k>=0;k--){const d=new Date(Date.now()-k*DAY);days.push([['Вс','Пн','Вт','Ср','Чт','Пт','Сб'][d.getDay()],st.days[today(d)]||0]);}
+  const mx=Math.max(1,...days.map(x=>x[1]));
+  return '<div class="stat-card"><h3>Общий прогресс</h3><div class="bar"><i style="width:'+totalPct()+'%"></i></div>'+row('Прогресс',totalPct()+'%')+row('⭐ XP',st.xp)+row('🔥 Серия',curStreak()+' дн.')+row('Изучено слов',lw)+row('Изучено кандзи',lk)+'</div>'+
+    '<div class="stat-card"><h3>Активность за 7 дней</h3><div class="chart">'+days.map(([n,v])=>'<div><b style="height:'+Math.round(v/mx*70)+'px"></b>'+n+'</div>').join('')+'</div></div>'+
+    '<div class="stat-card"><h3>Статусы карточек</h3>'+Object.entries(cnt).map(([k,v])=>row(k,v)).join('')+'</div>';
+}
+
+// Bottom nav + screen hook
+function onScreen(id){
+  document.querySelectorAll('#bnav button').forEach(b=>{const t=b.dataset.nav;b.classList.toggle('active',t===id||(t==='studyScreen'&&(id==='kanaScreen'||id==='levelsScreen'||id==='courseScreen')));});
+  if(id==='menuScreen')renderDash();
+  if(id==='reviewScreen')startReview();
+  if(id==='progressScreen')renderProgress();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('#bnav button').forEach(b=>b.onclick=()=>showScreen(b.dataset.nav));
+applyTheme(loadJSON('jp-theme',null)||effTheme());
+renderDash();
+</script>
+</body>
+</html>
